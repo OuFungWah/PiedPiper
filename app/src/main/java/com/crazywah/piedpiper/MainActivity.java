@@ -8,8 +8,12 @@ import android.os.Bundle;
 
 import com.crazywah.piedpiper.base.BaseActivity;
 import com.crazywah.piedpiper.common.PiedToast;
+import com.crazywah.piedpiper.widget.MainBottomView;
+import com.crazywah.piedpiper.widget.UnReadView;
 
 public class MainActivity extends BaseActivity {
+
+    private MainBottomView bottomView;
 
     public static void launch(Context context){
         context.startActivity(new Intent(context,MainActivity.class));
@@ -18,6 +22,17 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initView();
+        setView();
+    }
+
+    private void initView(){
+        bottomView = findViewById(R.id.main_bottom_view);
+    }
+
+    private void setView() {
+        bottomView.showRedUnRead(0,"5");
+        bottomView.showGreenUnRead(1,"1");
     }
 
     @Override
