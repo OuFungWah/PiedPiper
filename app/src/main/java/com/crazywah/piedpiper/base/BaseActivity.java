@@ -28,4 +28,9 @@ public abstract class BaseActivity extends Activity {
 
     protected abstract void prepareLogic();
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+    }
 }

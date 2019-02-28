@@ -13,4 +13,10 @@ public interface ConstValue {
     String HEADER_K_CONTENT_TYPE = "Content-Type";
     String HEADER_V_CONTENT_TYPE_JSON = "application/json";
 
+    int LOGIN_INFO = 0;
+
+    String[] SP_NAMES = new String[]{
+        "LOGIN_INFO"
+    };
+
 }

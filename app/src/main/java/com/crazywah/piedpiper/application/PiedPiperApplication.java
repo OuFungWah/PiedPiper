@@ -42,16 +42,12 @@ public class PiedPiperApplication extends Application {
         this.registerReceiver(receiver,intentFilter);
     }
 
-    public static Context getContext() {
-        return context;
-    }
-
-    public static void setContext(Context context) {
-        PiedPiperApplication.context = context;
-    }
-
     public static User getLoginUser() {
         return loginUser;
+    }
+
+    public static void setLoginUser(User loginUser) {
+        PiedPiperApplication.loginUser = loginUser;
     }
 
     // 如果返回值为 null，则全部使用默认参数。
