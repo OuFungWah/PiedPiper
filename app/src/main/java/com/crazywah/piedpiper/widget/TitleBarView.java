@@ -1,0 +1,124 @@
+package com.crazywah.piedpiper.widget;
+
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.os.Build;
+import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
+import android.util.AttributeSet;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import com.crazywah.piedpiper.R;
+
+public class TitleBarView extends RelativeLayout implements View.OnClickListener {
+
+    public static final int CLICK_AVATAR = 0;
+    public static final int CLICK_TITLE = 1;
+    public static final int CLICK_ONE = 2;
+    public static final int CLICK_TWO = 3;
+
+    private View rootView;
+    private ImageView avatarImg;
+    private TextView titleTv;
+    private ImageView oneImg;
+    private ImageView twoImg;
+
+    private OnTitleBarClickListener onTitleBarClickListener;
+
+    public TitleBarView(Context context) {
+        super(context);
+        init(context);
+    }
+
+    public TitleBarView(Context context, @Nullable AttributeSet attrs) {
+        super(context, attrs);
+        init(context);
+    }
+
+    public TitleBarView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        init(context);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public TitleBarView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
+        init(context);
+    }
+
+    private void init(Context context) {
+        rootView = LayoutInflater.from(context).inflate(R.layout.titlebar_view, this, false);
+        avatarImg = rootView.findViewById(R.id.titlebar_avatar_img);
+        titleTv = rootView.findViewById(R.id.titlebar_title_tv);
+        oneImg = rootView.findViewById(R.id.titlebar_one_img);
+        twoImg = rootView.findViewById(R.id.titlebar_two_img);
+
+        addView(rootView);
+
+        avatarImg.setOnClickListener(this);
+        titleTv.setOnClickListener(this);
+        oneImg.setOnClickListener(this);
+        twoImg.setOnClickListener(this);
+    }
+
+    public void setTitle(String text) {
+        titleTv.setText(text);
+    }
+
+    public void setAvatarImg(int avatarRes) {
+        avatarImg.setImageDrawable(getResources().getDrawable(avatarRes));
+    }
+
+    public void setAvatarImg(Bitmap bitmap) {
+        avatarImg.setImageBitmap(bitmap);
+    }
+
+    public void setOneImg(int iconRes) {
+        oneImg.setImageDrawable(getResources().getDrawable(iconRes));
+        oneImg.setVisibility(VISIBLE);
+    }
+
+    public void setTwoImg(int iconRes) {
+        twoImg.setImageDrawable(getResources().getDrawable(iconRes));
+        twoImg.setVisibility(VISIBLE);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (onTitleBarClickListener != null) {
+            switch (v.getId()) {
+                case R.id.titlebar_avatar_img:
+                    onTitleBarClickListener.onTitleClick(CLICK_AVATAR);
+                    break;
+                case R.id.titlebar_title_tv:
+                    onTitleBarClickListener.onTitleClick(CLICK_TITLE);
+                    break;
+                case R.id.titlebar_one_img:
+                    onTitleBarClickListener.onTitleClick(CLICK_ONE);
+                    break;
+                case R.id.titlebar_two_img:
+                    onTitleBarClickListener.onTitleClick(CLICK_TWO);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    public OnTitleBarClickListener getOnTitleBarClickListener() {
+        return onTitleBarClickListener;
+    }
+
+    public void setOnTitleBarClickListener(OnTitleBarClickListener onTitleBarClickListener) {
+        this.onTitleBarClickListener = onTitleBarClickListener;
+    }
+
+    public interface OnTitleBarClickListener {
+        void onTitleClick(int itemType);
+    }
+
+}

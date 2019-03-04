@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.os.Message;
 import android.support.annotation.Nullable;
 
-import com.crazywah.piedpiper.MainActivity;
+import com.crazywah.piedpiper.homepage.MainActivity;
 import com.crazywah.piedpiper.R;
 import com.crazywah.piedpiper.base.BaseActivity;
 import com.crazywah.piedpiper.common.ConstValue;

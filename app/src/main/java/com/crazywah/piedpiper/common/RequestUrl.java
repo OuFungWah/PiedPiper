@@ -5,7 +5,7 @@ public class RequestUrl {
     public static final boolean DEV = true;
 
     public static final String HOST = "http://www.crazywah.com:9527";
-    public static final String DEV_HOST = "http://192.168.0.101:9527";
+    public static final String DEV_HOST = "http://192.168.0.105:9527";
 
     public static final String URL_LOGIN = (DEV?DEV_HOST:HOST)+"/account/login";
     public static final String URL_REGISTER = (DEV?DEV_HOST:HOST)+"/account/register";

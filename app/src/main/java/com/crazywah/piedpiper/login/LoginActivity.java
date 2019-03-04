@@ -14,7 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.crazywah.piedpiper.MainActivity;
+import com.crazywah.piedpiper.homepage.MainActivity;
 import com.crazywah.piedpiper.R;
 import com.crazywah.piedpiper.application.PiedPiperApplication;
 import com.crazywah.piedpiper.base.BaseActivity;
