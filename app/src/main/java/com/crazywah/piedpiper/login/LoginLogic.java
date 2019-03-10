@@ -7,13 +7,10 @@ import android.text.TextUtils;
 
 import com.crazywah.piedpiper.application.PiedPiperApplication;
 import com.crazywah.piedpiper.base.BaseLogic;
-import com.crazywah.piedpiper.common.ConstValue;
 import com.crazywah.piedpiper.common.PiedCallback;
-import com.crazywah.piedpiper.common.PiedToast;
 import com.crazywah.piedpiper.common.RequestManager;
 import com.crazywah.piedpiper.common.ResponseStateCode;
-import com.crazywah.piedpiper.common.User;
-import com.crazywah.piedpiper.util.SPUtil;
+import com.crazywah.piedpiper.bean.User;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 

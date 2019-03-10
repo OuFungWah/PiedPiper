@@ -2,12 +2,11 @@ package com.crazywah.piedpiper.register.logic;
 
 import android.content.Context;
 import android.os.Handler;
-import android.text.TextUtils;
 
 import com.crazywah.piedpiper.base.BaseLogic;
 import com.crazywah.piedpiper.common.PiedCallback;
 import com.crazywah.piedpiper.common.RequestManager;
-import com.crazywah.piedpiper.common.User;
+import com.crazywah.piedpiper.bean.User;
 
 public class RegisterLogic extends BaseLogic {
 

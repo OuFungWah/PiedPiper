@@ -10,6 +10,7 @@ import com.crazywah.piedpiper.R;
 import com.crazywah.piedpiper.base.BaseActivity;
 import com.crazywah.piedpiper.common.PiedToast;
 import com.crazywah.piedpiper.homepage.adapter.HomePagerAdapter;
+import com.crazywah.piedpiper.util.NotificationUtil;
 import com.crazywah.piedpiper.widget.MainBottomView;
 import com.crazywah.piedpiper.widget.TitleBarView;
 
@@ -95,6 +96,12 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     @Override
     public void onPageScrollStateChanged(int state) {
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        NotificationUtil.cannelAll();
     }
 
     /**

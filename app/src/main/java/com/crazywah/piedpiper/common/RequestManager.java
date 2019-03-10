@@ -7,6 +7,8 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
+import com.crazywah.piedpiper.bean.User;
+import com.crazywah.piedpiper.chatroom.request.UserInfoRequest;
 import com.crazywah.piedpiper.login.request.LoginRequest;
 import com.crazywah.piedpiper.register.request.RegisterRequest;
 
@@ -51,6 +53,21 @@ public class RequestManager {
             }
         });
         addRequest(registerRequest);
+    }
+
+    public void getUserInfo(String targetId, final PiedCallback<User> callback) {
+        UserInfoRequest userInfoRequest = new UserInfoRequest(targetId, new Response.Listener<User>() {
+            @Override
+            public void onResponse(User response) {
+                callback.onSuccess(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                callback.onFail(error.getMessage());
+            }
+        });
+        addRequest(userInfoRequest);
     }
 
     public void addRequest(Request request) {

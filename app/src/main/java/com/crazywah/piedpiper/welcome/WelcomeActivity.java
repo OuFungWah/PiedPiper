@@ -2,6 +2,7 @@ package com.crazywah.piedpiper.welcome;
 
 import android.os.Bundle;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.crazywah.piedpiper.homepage.MainActivity;
@@ -12,15 +13,26 @@ import com.crazywah.piedpiper.common.PiedToast;
 import com.crazywah.piedpiper.login.LoginActivity;
 import com.crazywah.piedpiper.login.LoginConst;
 import com.crazywah.piedpiper.login.LoginLogic;
+import com.crazywah.piedpiper.util.PermisstionUtil;
 import com.crazywah.piedpiper.util.SPUtil;
 
 public class WelcomeActivity extends BaseActivity {
+
+    private static final int PERMISSION_REQUEST = 0;
 
     private LoginLogic logic;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (!PermisstionUtil.check(PermisstionUtil.TYPE_WRITE_STORAGE)) {
+            PermisstionUtil.requestAllPermission(this, PERMISSION_REQUEST);
+        } else {
+            autoLogin();
+        }
+    }
+
+    public void autoLogin() {
         if (SPUtil.from(ConstValue.SP_NAMES[ConstValue.LOGIN_INFO]).contains(LoginConst.SP_KEY_ISAUTO) && SPUtil.getInstance().getBoolean(LoginConst.SP_KEY_ISAUTO)) {
             logic.loginWithToken(SPUtil.from(ConstValue.SP_NAMES[ConstValue.LOGIN_INFO]).getString(LoginConst.SP_KEY_ACCOUNTID), SPUtil.from(ConstValue.SP_NAMES[ConstValue.LOGIN_INFO]).getString(LoginConst.SP_KEY_TOKEN));
         } else {
@@ -68,6 +80,12 @@ public class WelcomeActivity extends BaseActivity {
                 break;
         }
         return false;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        autoLogin();
     }
 
     @Override

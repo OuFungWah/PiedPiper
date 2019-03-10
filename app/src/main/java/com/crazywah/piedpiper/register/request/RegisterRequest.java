@@ -1,11 +1,9 @@
 package com.crazywah.piedpiper.register.request;
 
-import android.support.annotation.Nullable;
-
 import com.android.volley.Response;
 import com.crazywah.piedpiper.common.RequestBase;
 import com.crazywah.piedpiper.common.RequestUrl;
-import com.crazywah.piedpiper.common.User;
+import com.crazywah.piedpiper.bean.User;
 
 import java.util.HashMap;
 import java.util.Map;

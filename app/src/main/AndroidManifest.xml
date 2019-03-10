@@ -48,7 +48,9 @@
         android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".homepage.MainActivity" />
+        <activity
+            android:name=".homepage.MainActivity"
+            android:launchMode="singleTask" />
         <activity
             android:name=".login.LoginActivity"
             android:launchMode="singleTask" />
@@ -58,6 +60,13 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".chatroom.activity.ChatRoomActivity" />
+        <activity android:name=".base.SchemerActivity" >
+            <intent-filter>
+                <data android:scheme="piedpiper" android:host="crazywah.com"/>
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
 
@@ -100,6 +109,7 @@
 
         <!-- 云信进程间通信service -->
         <service android:name="com.netease.nimlib.service.ResponseService" />
+        <service android:name=".base.MessageService" />
 
         <!-- 云信进程间通信provider -->
         <!-- android:authorities="{包名}.ipc.provider", 请将com.netease.nim.demo替换为自己的包名 -->

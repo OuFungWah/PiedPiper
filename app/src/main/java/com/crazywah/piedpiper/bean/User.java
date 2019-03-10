@@ -1,4 +1,4 @@
-package com.crazywah.piedpiper.common;
+package com.crazywah.piedpiper.bean;
 
 import java.util.Date;
 

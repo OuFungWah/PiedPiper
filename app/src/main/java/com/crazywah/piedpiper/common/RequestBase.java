@@ -10,6 +10,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
+import com.crazywah.piedpiper.application.PiedPiperApplication;
 import com.google.gson.Gson;
 
 import java.io.UnsupportedEncodingException;
@@ -67,6 +68,9 @@ public abstract class RequestBase<T> extends Request<ResponseBase> {
     public Map<String, String> getHeaders() throws AuthFailureError {
         Map<String, String> headers = new HashMap<>();
         headers.put(ConstValue.HEADER_K_CONTENT_TYPE, ConstValue.HEADER_V_CONTENT_TYPE_JSON);
+        if (PiedPiperApplication.getLoginUser() != null && !TextUtils.isEmpty(PiedPiperApplication.getLoginUser().getToken())) {
+            headers.put("token", PiedPiperApplication.getLoginUser().getToken());
+        }
         return headers;
     }
 

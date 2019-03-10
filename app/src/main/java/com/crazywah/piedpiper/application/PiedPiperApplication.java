@@ -2,18 +2,23 @@ package com.crazywah.piedpiper.application;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentFilter;
 
+import com.crazywah.piedpiper.base.BaseReceiver;
+import com.crazywah.piedpiper.base.MessageService;
 import com.crazywah.piedpiper.common.PiedToast;
 import com.crazywah.piedpiper.common.RequestManager;
-import com.crazywah.piedpiper.common.User;
-import com.crazywah.piedpiper.notification.BaseReceiver;
+import com.crazywah.piedpiper.bean.User;
+import com.crazywah.piedpiper.util.NotificationUtil;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.NimIntent;
 import com.netease.nimlib.sdk.SDKOptions;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 
 public class PiedPiperApplication extends Application {
+
+    private static final String TAG = "PiedPiperApplication";
 
     private static Context context;
     private static User loginUser;
@@ -28,18 +33,22 @@ public class PiedPiperApplication extends Application {
         NIMClient.init(this, loginInfo(), options());
         NIMClient.toggleNotification(false);
         combineBaseReceiver();
+        this.startService(new Intent(this, MessageService.class));
         RequestManager.getInstance().init(this);
+        NotificationUtil.init();
     }
 
-    private void combineBaseReceiver(){
+    private void combineBaseReceiver() {
         BaseReceiver receiver = new BaseReceiver();
-        IntentFilter intentFilter = new IntentFilter(context.getPackageName() + NimIntent.ACTION_RECEIVE_CUSTOM_NOTIFICATION);
-        intentFilter.addAction(context.getPackageName() + NimIntent.ACTION_RECEIVE_AVCHAT_CALL_NOTIFICATION);
-        intentFilter.addAction(context.getPackageName() + NimIntent.ACTION_RECEIVE_MSG);
-        intentFilter.addAction(context.getPackageName() + NimIntent.ACTION_RECEIVE_RTS_NOTIFICATION);
-        intentFilter.addAction(context.getPackageName() + NimIntent.EXTRA_BROADCAST_MSG);
-        intentFilter.addAction(context.getPackageName() + NimIntent.EXTRA_NOTIFY_CONTENT);
-        this.registerReceiver(receiver,intentFilter);
+        IntentFilter intentFilter = new IntentFilter(context.getPackageName() + NimIntent.ACTION_RECEIVE_MSG);
+//        IntentFilter intentFilter = new IntentFilter(context.getPackageName() + NimIntent.ACTION_RECEIVE_CUSTOM_NOTIFICATION);
+//        intentFilter.addAction(context.getPackageName() + NimIntent.ACTION_RECEIVE_CUSTOM_NOTIFICATION);
+//        intentFilter.addAction(context.getPackageName() + NimIntent.ACTION_RECEIVE_AVCHAT_CALL_NOTIFICATION);
+//        intentFilter.addAction(context.getPackageName() + NimIntent.ACTION_RECEIVE_MSG);
+//        intentFilter.addAction(context.getPackageName() + NimIntent.ACTION_RECEIVE_RTS_NOTIFICATION);
+//        intentFilter.addAction(context.getPackageName() + NimIntent.EXTRA_BROADCAST_MSG);
+//        intentFilter.addAction(context.getPackageName() + NimIntent.EXTRA_NOTIFY_CONTENT);
+        this.registerReceiver(receiver, intentFilter, NimIntent.PERMISSION_RECEIVE_MSG, null);
     }
 
     public static User getLoginUser() {
@@ -60,7 +69,7 @@ public class PiedPiperApplication extends Application {
         return null;
     }
 
-    public static Context getInstance(){
+    public static Context getInstance() {
         return context;
     }
 

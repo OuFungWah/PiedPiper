@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingBottom="6dp"
+    android:paddingTop="6dp">
+
+    <ImageView
+        android:layout_marginRight="10dp"
+        android:id="@+id/chatroom_right_avatar_img"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="3dp"
+        android:src="@drawable/ic_avatar_black"
+        android:layout_alignParentRight="true"/>
+
+    <TextView
+        android:id="@+id/chatroom_right_content_tv"
+        android:layout_marginRight="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/chatroom_right_bg"
+        android:minHeight="36dp"
+        android:layout_marginLeft="100dp"
+        android:padding="10dp"
+        android:text="1"
+        android:textColor="@android:color/white"
+        android:textSize="14sp"
+        android:layout_toLeftOf="@+id/chatroom_right_avatar_img"/>
+
+</RelativeLayout>
