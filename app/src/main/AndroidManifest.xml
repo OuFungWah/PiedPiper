@@ -48,27 +48,41 @@
         android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <provider
+            android:name=".application.GenericFileProvider"
+            android:authorities="${applicationId}.my.package.name.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"/>
+        </provider>
+
         <activity
-            android:name=".homepage.MainActivity"
+            android:name=".module.homepage.activity.MainActivity"
             android:launchMode="singleTask" />
         <activity
-            android:name=".login.LoginActivity"
+            android:name=".module.login.LoginActivity"
             android:launchMode="singleTask" />
-        <activity android:name=".register.activity.RegisterActivity" />
-        <activity android:name=".welcome.WelcomeActivity">
+        <activity android:name=".module.register.activity.RegisterActivity" />
+        <activity android:name=".module.welcome.WelcomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".chatroom.activity.ChatRoomActivity" />
+        <activity android:name=".module.chatroom.activity.ChatRoomActivity" />
         <activity android:name=".base.SchemerActivity" >
             <intent-filter>
                 <data android:scheme="piedpiper" android:host="crazywah.com"/>
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
+        <activity android:name=".module.contact.activity.FriendRequestActivity" />
+        <activity android:name=".module.user.activity.UserInfoActivity" />
+        <activity android:name=".module.user.activity.ModifyInfoActivity" />
 
         <!-- APP key, 可以在这里设置，也可以在 SDKOptions 中提供。
            如果 SDKOptions 中提供了，取 SDKOptions 中的值。 -->

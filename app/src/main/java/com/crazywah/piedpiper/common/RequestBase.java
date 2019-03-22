@@ -27,10 +27,19 @@ public abstract class RequestBase<T> extends Request<ResponseBase> {
     private Response.Listener<T> listener;
     private Response.ErrorListener errorListener;
 
+    private Type parseType;
+
     public RequestBase(String url, Response.Listener<T> listener, Response.ErrorListener errorListener) {
         this(Method.POST, url, errorListener);
         this.listener = listener;
         this.errorListener = errorListener;
+    }
+
+    public RequestBase(String url, Response.Listener<T> listener, Response.ErrorListener errorListener, Type type) {
+        this(Method.POST, url, errorListener);
+        this.listener = listener;
+        this.errorListener = errorListener;
+        this.parseType = type;
     }
 
     public RequestBase(int method, String url, @Nullable Response.ErrorListener errorListener) {
@@ -48,7 +57,11 @@ public abstract class RequestBase<T> extends Request<ResponseBase> {
         }
         Log.d(TAG, "parseNetworkResponse: parsed = " + parsed);
         ResponseBase responseBase = mParser.fromJson(parsed, ResponseBase.class);
-        responseBase.setData(mParser.fromJson(responseBase.getResult(), getTClass()));
+        if (parseType != null) {
+            responseBase.setData(mParser.fromJson(responseBase.getResult(), parseType));
+        } else {
+            responseBase.setData(mParser.fromJson(responseBase.getResult(), getTClass()));
+        }
         if (responseBase != null) {
             if (responseBase.getStatus() == null) {
                 return Response.error(new VolleyError("服务器返回数据为空"));
@@ -110,8 +123,8 @@ public abstract class RequestBase<T> extends Request<ResponseBase> {
 
     public abstract Map<String, String> getParam();
 
-    public Class<T> getTClass() {
-        Class<T> tClass = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+    public Type getTClass() {
+        Type tClass = ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
         return tClass;
     }
 

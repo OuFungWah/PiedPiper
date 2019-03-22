@@ -6,8 +6,7 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.crazywah.piedpiper.bean.MessageBean;
-import com.crazywah.piedpiper.chatroom.activity.ChatRoomActivity;
+import com.crazywah.piedpiper.module.chatroom.activity.ChatRoomActivity;
 import com.crazywah.piedpiper.common.PiedToast;
 import com.crazywah.piedpiper.util.MessageUtil;
 import com.crazywah.piedpiper.util.NotificationUtil;

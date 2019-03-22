@@ -51,7 +51,7 @@ public class UnReadView extends RelativeLayout {
         textView.setTextSize(12);
         textView.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
         int radius = (getWidth() < getHeight() ? getWidth() / 2 : getHeight() / 2);
-        setForeground(Color.RED, radius);
+        setForeground(Color.RED, radius*3/4);
         setBackground(Color.WHITE, radius);
     }
 
@@ -64,6 +64,11 @@ public class UnReadView extends RelativeLayout {
     }
 
     public void show() {
+        setVisibility(VISIBLE);
+    }
+
+    public void show(String text){
+        textView.setText(text);
         setVisibility(VISIBLE);
     }
 

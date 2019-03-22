@@ -5,8 +5,8 @@ import android.os.Bundle;
 
 import com.crazywah.piedpiper.base.BaseActivity;
 import com.crazywah.piedpiper.base.BaseSchemer;
-import com.crazywah.piedpiper.chatroom.activity.ChatRoomActivity;
-import com.crazywah.piedpiper.homepage.MainActivity;
+import com.crazywah.piedpiper.module.chatroom.activity.ChatRoomActivity;
+import com.crazywah.piedpiper.module.homepage.activity.MainActivity;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 
 public class InnerSchemmer extends BaseSchemer {

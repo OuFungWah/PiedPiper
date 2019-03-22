@@ -76,7 +76,7 @@ public class MainBottomView extends LinearLayout implements View.OnClickListener
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         getLayoutParams().width = LayoutParams.MATCH_PARENT;
-        getLayoutParams().height = DensityUtils.dp2px(68);
+        getLayoutParams().height = DensityUtils.dp2px(52);
     }
 
     public void check(int index) {
@@ -92,6 +92,10 @@ public class MainBottomView extends LinearLayout implements View.OnClickListener
 
     public void showGreenUnRead(int index, String text) {
         itemList.get(index).showGreenUnRead(text);
+    }
+
+    public void hideUnRead(int index){
+        itemList.get(index).hideUnRead();
     }
 
     @Override

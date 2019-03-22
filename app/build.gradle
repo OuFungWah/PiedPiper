@@ -47,4 +47,7 @@ dependencies {
     // 小米、华为、魅族、fcm 推送
     implementation 'com.netease.nimlib:push:5.6.1'
     implementation 'com.android.support:recyclerview-v7:27.1.1'
+    implementation 'com.github.bumptech.glide:glide:4.8.0'
+    implementation 'com.android.support:support-v4:27.1.1'
+    implementation 'org.greenrobot:eventbus:3.0.0'
 }

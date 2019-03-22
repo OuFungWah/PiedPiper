@@ -2,13 +2,19 @@ package com.crazywah.piedpiper.util;
 
 import android.support.annotation.Nullable;
 
+import com.crazywah.piedpiper.application.PiedPiperApplication;
+import com.crazywah.piedpiper.bean.User;
+import com.google.gson.Gson;
 import com.netease.nimlib.sdk.InvocationFuture;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;
+import com.netease.nimlib.sdk.RequestCallbackWrapper;
 import com.netease.nimlib.sdk.msg.MessageBuilder;
 import com.netease.nimlib.sdk.msg.MsgService;
+import com.netease.nimlib.sdk.msg.attachment.MsgAttachment;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
+import com.netease.nimlib.sdk.msg.model.RecentContact;
 
 import java.util.List;
 
@@ -34,15 +40,19 @@ public class MessageUtil {
         getService().pullMessageHistory(anchor, limit, true).setCallback(callback);
     }
 
-    public static int getTotalUnReadCount(){
+    public static void getRecentContact(RequestCallbackWrapper<List<RecentContact>> callback) {
+        getService().queryRecentContacts().setCallback(callback);
+    }
+
+    public static int getTotalUnReadCount() {
         return getService().getTotalUnreadCount();
     }
 
-    public static void getUnRead(){
+    public static void getUnRead() {
 
     }
 
-    public static MsgService getService(){
+    public static MsgService getService() {
         return NIMClient.getService(MsgService.class);
     }
 

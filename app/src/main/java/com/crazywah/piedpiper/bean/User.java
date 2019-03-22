@@ -4,6 +4,17 @@ import java.util.Date;
 
 public class User {
 
+    public static String getGenderString(int gender) {
+        switch (gender) {
+            case 0:
+                return "男";
+            case 1:
+                return "女";
+            default:
+                return "未知";
+        }
+    }
+
     /*---------以下属性来自用户表-----------*/
 
     /**
@@ -170,6 +181,10 @@ public class User {
         return gender;
     }
 
+    public String getGenderString() {
+        return getGenderString(gender);
+    }
+
     public void setGender(int gender) {
         this.gender = gender;
     }
@@ -236,6 +251,10 @@ public class User {
 
     public void setRequestMessage(String requestMessage) {
         this.requestMessage = requestMessage;
+    }
+
+    public String getName() {
+        return getAlias() == null ? (getNickname() == null ? getAccountId() : getNickname()) : getAlias();
     }
 
     @Override

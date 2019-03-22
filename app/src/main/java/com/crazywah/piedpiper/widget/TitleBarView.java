@@ -13,6 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.crazywah.piedpiper.R;
+import com.crazywah.piedpiper.util.ImageLoader;
 
 public class TitleBarView extends RelativeLayout implements View.OnClickListener {
 
@@ -26,6 +27,8 @@ public class TitleBarView extends RelativeLayout implements View.OnClickListener
     private TextView titleTv;
     private ImageView oneImg;
     private ImageView twoImg;
+    private RelativeLayout oneRl;
+    private RelativeLayout twoRl;
 
     private OnTitleBarClickListener onTitleBarClickListener;
 
@@ -56,13 +59,15 @@ public class TitleBarView extends RelativeLayout implements View.OnClickListener
         titleTv = rootView.findViewById(R.id.titlebar_title_tv);
         oneImg = rootView.findViewById(R.id.titlebar_one_img);
         twoImg = rootView.findViewById(R.id.titlebar_two_img);
+        oneRl = rootView.findViewById(R.id.titlebar_one_rl);
+        twoRl = rootView.findViewById(R.id.titlebar_two_rl);
 
         addView(rootView);
 
         avatarImg.setOnClickListener(this);
         titleTv.setOnClickListener(this);
-        oneImg.setOnClickListener(this);
-        twoImg.setOnClickListener(this);
+        oneRl.setOnClickListener(this);
+        twoRl.setOnClickListener(this);
     }
 
     public void setTitle(String text) {
@@ -79,12 +84,21 @@ public class TitleBarView extends RelativeLayout implements View.OnClickListener
 
     public void setOneImg(int iconRes) {
         oneImg.setImageDrawable(getResources().getDrawable(iconRes));
-        oneImg.setVisibility(VISIBLE);
+        oneRl.setVisibility(VISIBLE);
+    }
+
+    public void setOneImg(Bitmap bitmap) {
+        oneImg.setImageBitmap(bitmap);
+        oneRl.setVisibility(VISIBLE);
     }
 
     public void setTwoImg(int iconRes) {
         twoImg.setImageDrawable(getResources().getDrawable(iconRes));
-        twoImg.setVisibility(VISIBLE);
+        twoRl.setVisibility(VISIBLE);
+    }
+
+    public void setAvatarImg(String url) {
+        ImageLoader.loadCircle(url, avatarImg);
     }
 
     @Override
@@ -97,10 +111,10 @@ public class TitleBarView extends RelativeLayout implements View.OnClickListener
                 case R.id.titlebar_title_tv:
                     onTitleBarClickListener.onTitleClick(CLICK_TITLE);
                     break;
-                case R.id.titlebar_one_img:
+                case R.id.titlebar_one_rl:
                     onTitleBarClickListener.onTitleClick(CLICK_ONE);
                     break;
-                case R.id.titlebar_two_img:
+                case R.id.titlebar_two_rl:
                     onTitleBarClickListener.onTitleClick(CLICK_TWO);
                     break;
                 default:

@@ -9,6 +9,17 @@ public interface ConstValue {
     int NICKNAME_MAX = 20;
     int NICKNAME_MIN = 1;
 
+    String[] USER_INFO_METHOD = new String[]{
+            "getNickname",
+            "getPassword",
+            "getGenderString",
+            "getBirthday",
+            "getMobile",
+            "getAddress",
+            "getEmail",
+            "getSignature"
+    };
+
     String HEADER_K_TOKEN = "token";
     String HEADER_K_CONTENT_TYPE = "Content-Type";
     String HEADER_V_CONTENT_TYPE_JSON = "application/json";
