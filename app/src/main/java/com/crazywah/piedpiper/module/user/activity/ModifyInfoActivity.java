@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.text.InputType;
 import android.text.TextUtils;
+import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
@@ -16,10 +18,13 @@ import android.widget.TextView;
 import com.crazywah.piedpiper.R;
 import com.crazywah.piedpiper.application.PiedPiperApplication;
 import com.crazywah.piedpiper.base.BaseActivity;
+import com.crazywah.piedpiper.common.ConstValue;
 import com.crazywah.piedpiper.common.PiedDatePicker;
 import com.crazywah.piedpiper.common.PiedEvent;
 import com.crazywah.piedpiper.common.PiedToast;
+import com.crazywah.piedpiper.module.login.LoginConst;
 import com.crazywah.piedpiper.module.user.logic.ModifyInfoLogic;
+import com.crazywah.piedpiper.util.SPUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -79,8 +84,10 @@ public class ModifyInfoActivity extends BaseActivity implements View.OnClickList
         switch (type) {
             case ModifyInfoLogic.INFO_TYPE_PASSWORD:
                 showTwoEt("修改密码", "输入新密码", null, "再次输入密码", null);
-                firstEt.setInputType(EditorInfo.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-                secondEt.setInputType(EditorInfo.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                firstEt.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                secondEt.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                firstEt.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                secondEt.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
                 break;
             case ModifyInfoLogic.INFO_TYPE_NICKNAME:
                 showOneEt("修改昵称", "请输入新昵称", PiedPiperApplication.getLoginUser().getNickname());
@@ -100,8 +107,12 @@ public class ModifyInfoActivity extends BaseActivity implements View.OnClickList
                 showOneEt("修改签名", "请输入新签名", PiedPiperApplication.getLoginUser().getSignature());
                 break;
             case ModifyInfoLogic.INFO_TYPE_BIRTHDAY:
-                showDateEt("修改生日", sdf.format(PiedPiperApplication.getLoginUser().getBirthday()));
-                datePicker.setDate(PiedPiperApplication.getLoginUser().getBirthday());
+                if(PiedPiperApplication.getLoginUser().getBirthday() !=null ) {
+                    showDateEt("修改生日", sdf.format(PiedPiperApplication.getLoginUser().getBirthday()));
+                    datePicker.setDate(PiedPiperApplication.getLoginUser().getBirthday());
+                }else{
+                    showDateEt("修改生日", "请选择你的生日");
+                }
                 break;
             case ModifyInfoLogic.INFO_TYPE_GENDER:
                 showRadioGroup("修改性别", PiedPiperApplication.getLoginUser().getGender());
@@ -208,6 +219,9 @@ public class ModifyInfoActivity extends BaseActivity implements View.OnClickList
                 switch (type) {
                     case ModifyInfoLogic.INFO_TYPE_PASSWORD:
                         PiedPiperApplication.getLoginUser().setPassword(firstStr);
+                        if (SPUtil.from(ConstValue.SP_NAMES[ConstValue.LOGIN_INFO]).contains(LoginConst.SP_KEY_ISAUTO) && SPUtil.from(ConstValue.SP_NAMES[ConstValue.LOGIN_INFO]).getBoolean(LoginConst.SP_KEY_ISAUTO)) {
+                            SPUtil.from(ConstValue.SP_NAMES[ConstValue.LOGIN_INFO]).save(LoginConst.SP_KEY_PASSWORD, firstStr);
+                        }
                         break;
                     case ModifyInfoLogic.INFO_TYPE_NICKNAME:
                         PiedPiperApplication.getLoginUser().setNickname(firstStr);
@@ -265,7 +279,7 @@ public class ModifyInfoActivity extends BaseActivity implements View.OnClickList
         switch (v.getId()) {
             case R.id.info_modify_finish_tv:
                 firstStr = firstEt.getText().toString();
-                secondStr = firstEt.getText().toString();
+                secondStr = secondEt.getText().toString();
                 checkedGender = getSelectedRadioIndex();
                 switch (type) {
                     case ModifyInfoLogic.INFO_TYPE_PASSWORD:

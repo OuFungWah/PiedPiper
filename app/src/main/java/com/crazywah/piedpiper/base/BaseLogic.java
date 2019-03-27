@@ -13,6 +13,11 @@ public class BaseLogic {
     public BaseLogic(Context context,Handler handler){
         this.context = context;
         this.handler = handler;
+        initData();
+    }
+
+    protected void initData(){
+
     }
 
     public void notifyUi(int what){

@@ -33,6 +33,8 @@ public class UserInfoLogic extends BaseLogic {
     public static final int MSG_GET_USER_INFO_FAIL = 1;
     public static final int MSG_UPLOAD_AVATAR_SUCC = 2;
     public static final int MSG_UPLOAD_AVATAR_FAIL = 3;
+    public static final int MSG_SEND_MESSAGE_SUCC = 4;
+    public static final int MSG_SEND_MESSAGE_FAIL = 5;
 
     private static final String[] TITLES = new String[]{
             "昵称",
@@ -99,6 +101,21 @@ public class UserInfoLogic extends BaseLogic {
         });
     }
 
+    public void sendFriendRequest(String targetId, String requestMessage) {
+        RequestManager.getInstance().sendFriendRequest(PiedPiperApplication.getLoginUser().getAccountId(), targetId, requestMessage, new PiedCallback<Void>() {
+            @Override
+            public void onSuccess(Void object) {
+                notifyUi(MSG_SEND_MESSAGE_SUCC);
+            }
+
+            @Override
+            public boolean onFail(String message) {
+                notifyUi(MSG_SEND_MESSAGE_FAIL);
+                return false;
+            }
+        });
+    }
+
     public void afterGetUserData(User object) {
         user = object;
         combineList();
@@ -107,10 +124,10 @@ public class UserInfoLogic extends BaseLogic {
     }
 
     private void adjustEntrances() {
-        boolean isMe = user.getAccountId().equals(PiedPiperApplication.getLoginUser().getAccountId());
+        boolean isMe = false;
         if (user != null) {
             Class userClass = User.class;
-
+            isMe = user.getAccountId().equals(PiedPiperApplication.getLoginUser().getAccountId());
             for (int i = list.size() - 1; i >= 0; i--) {
                 if (list.get(i) instanceof NormalEntrance) {
                     try {

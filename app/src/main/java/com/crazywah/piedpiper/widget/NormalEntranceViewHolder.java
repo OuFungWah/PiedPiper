@@ -21,7 +21,7 @@ import com.crazywah.piedpiper.util.ImageLoader;
 import com.crazywah.piedpiper.widget.BackgroundView;
 import com.crazywah.piedpiper.widget.UnReadView;
 
-public class NormalEntranceViewHolder extends RecyclerView.ViewHolder {
+public class NormalEntranceViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
     private ImageView iconImg;
     private TextView titleTv;
@@ -31,6 +31,8 @@ public class NormalEntranceViewHolder extends RecyclerView.ViewHolder {
     private View entranceImg;
     private View subView;
     private View divider;
+
+    private String userId;
 
     public NormalEntranceViewHolder(ViewGroup parent) {
         super(LayoutInflater.from(parent.getContext()).inflate(R.layout.view_item_contact, parent, false));
@@ -48,22 +50,21 @@ public class NormalEntranceViewHolder extends RecyclerView.ViewHolder {
         setView(user, true);
     }
 
-    public void setView(final User user, boolean showDivider) {
-        ImageLoader.loadCircle(user.getAvatar(), iconImg);
-        if (!TextUtils.isEmpty(user.getAlias())) {
-            titleTv.setText(user.getAlias());
-        } else if (!TextUtils.isEmpty(user.getNickname())) {
-            titleTv.setText(user.getNickname());
-        } else if (!TextUtils.isEmpty(user.getAccountId())) {
-            titleTv.setText(user.getAccountId());
-        }
+    public void setView(User user, boolean showDivider) {
+        userId = user.getAccountId();
+        ImageLoader.loadUserAvatar(user, iconImg);
+        titleTv.setText(user.getName());
         subView.setVisibility(View.GONE);
         divider.setVisibility(showDivider ? View.VISIBLE : View.GONE);
         backgroundView.setVisibility(View.GONE);
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UserInfoActivity.launch(itemView.getContext(), user.getAccountId());
+                if (!TextUtils.isEmpty(userId)) {
+                    UserInfoActivity.launch(itemView.getContext(), userId);
+                } else {
+                    PiedToast.showShort("缺少用户ID");
+                }
             }
         });
     }
@@ -123,4 +124,8 @@ public class NormalEntranceViewHolder extends RecyclerView.ViewHolder {
     }
 
 
+    @Override
+    public void onClick(View v) {
+
+    }
 }

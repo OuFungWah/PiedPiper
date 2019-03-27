@@ -7,13 +7,17 @@ import android.net.Uri;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.crazywah.piedpiper.R;
 import com.crazywah.piedpiper.application.PiedPiperApplication;
 import com.crazywah.piedpiper.base.BaseActivity;
+import com.crazywah.piedpiper.bean.User;
 import com.crazywah.piedpiper.common.PiedCallback;
+import com.crazywah.piedpiper.common.PiedEvent;
 import com.crazywah.piedpiper.common.PiedToast;
 import com.crazywah.piedpiper.common.RequestManager;
+import com.crazywah.piedpiper.database.service.UserDBService;
 import com.crazywah.piedpiper.module.homepage.MainLogic;
 import com.crazywah.piedpiper.module.homepage.adapter.HomePagerAdapter;
 import com.crazywah.piedpiper.module.user.activity.UserInfoActivity;
@@ -24,14 +28,19 @@ import com.crazywah.piedpiper.util.PhotoDenpendence;
 import com.crazywah.piedpiper.widget.MainBottomView;
 import com.crazywah.piedpiper.widget.PhotoDialog;
 import com.crazywah.piedpiper.widget.TitleBarView;
+import com.google.gson.Gson;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.model.RecentContact;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.List;
 
 public class MainActivity extends BaseActivity implements ViewPager.OnPageChangeListener, MainBottomView.OnItemCheckListener, Observer<List<RecentContact>>, TitleBarView.OnTitleBarClickListener {
+
+    private static final String TAG = "MainActivity";
 
     private static final String[] TITLES = new String[]{
             "对话",
@@ -47,6 +56,9 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     private int currPageIndex = 0;
     private MainLogic logic;
 
+    private UserDBService userService;
+    private Gson parser = new Gson();
+
     private PhotoDenpendence photoDenpendence;
 
     public static void launch(Context context) {
@@ -56,6 +68,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        userService = UserDBService.newInstance();
         NIMClient.getService(MsgServiceObserve.class).observeRecentContact(this, true);
         photoDenpendence = new PhotoDenpendence(this, handler);
         photoDenpendence.setCallBack(new PhotoDenpendence.BitmapCallBack() {
@@ -80,8 +93,13 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         addDependence(photoDenpendence);
         initView();
         setView();
-        logic.updateMyInfo();
+        load();
         photoDialog.setDependence(photoDenpendence);
+    }
+
+    private void load() {
+        logic.updateMyInfo();
+        logic.loadFriends();
     }
 
     private void initView() {
@@ -100,13 +118,14 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         titleBarView.setOneImg(R.drawable.ic_add_a_photo_black);
         titleBarView.setOnTitleBarClickListener(this);
         bottomView.setItemCheckListener(this);
+        selectPage(currPageIndex);
         updateUnRead();
 //        bottomView.showRedUnRead(0, "5");
 //        bottomView.showGreenUnRead(1, "1");
     }
 
     private void updateView() {
-        titleBarView.setAvatarImg(PiedPiperApplication.getLoginUser().getAvatar());
+        titleBarView.setAvatarImg(PiedPiperApplication.getLoginUser());
     }
 
     @Override
@@ -126,6 +145,11 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
                 break;
             case MainLogic.MSG_GET_MY_INFO_FAIL:
                 updateUnRead();
+                break;
+            case MainLogic.MSG_GET_FRIENDS_SUCC:
+                EventBus.getDefault().post(new PiedEvent(PiedEvent.EventType.MSG_UPDATE_FRIEND_LIST));
+                break;
+            case MainLogic.MSG_GET_FRIENDS_FAIL:
                 break;
             default:
                 break;
@@ -194,6 +218,22 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         mainViewPager.setCurrentItem(index);
         titleBarView.setTitle(TITLES[index]);
         bottomView.check(index);
+        switch (index) {
+            case MainBottomView.INDEX_CHAT:
+                titleBarView.oneVisiable(false);
+                titleBarView.twoVisiable(true);
+                break;
+            case MainBottomView.INDEX_CONTACT:
+                titleBarView.oneVisiable(false);
+                titleBarView.twoVisiable(true);
+                break;
+            case MainBottomView.INDEX_DISCOVERY:
+                titleBarView.oneVisiable(true);
+                titleBarView.twoVisiable(true);
+                break;
+            default:
+                break;
+        }
     }
 
     private void updateUnRead() {
@@ -221,6 +261,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
                 photoDialog.show();
                 break;
             case TitleBarView.CLICK_TWO:
+                SearchActivity.launch(this);
                 break;
             default:
                 break;

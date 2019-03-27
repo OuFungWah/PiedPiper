@@ -13,6 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.crazywah.piedpiper.R;
+import com.crazywah.piedpiper.bean.User;
 import com.crazywah.piedpiper.util.ImageLoader;
 
 public class TitleBarView extends RelativeLayout implements View.OnClickListener {
@@ -97,8 +98,8 @@ public class TitleBarView extends RelativeLayout implements View.OnClickListener
         twoRl.setVisibility(VISIBLE);
     }
 
-    public void setAvatarImg(String url) {
-        ImageLoader.loadCircle(url, avatarImg);
+    public void setAvatarImg(User user) {
+        ImageLoader.loadUserAvatar(user, avatarImg);
     }
 
     @Override
@@ -121,6 +122,13 @@ public class TitleBarView extends RelativeLayout implements View.OnClickListener
                     break;
             }
         }
+    }
+
+    public void oneVisiable(boolean flag){
+        oneRl.setVisibility(flag?VISIBLE:GONE);
+    }
+    public void twoVisiable(boolean flag){
+        twoRl.setVisibility(flag?VISIBLE:GONE);
     }
 
     public OnTitleBarClickListener getOnTitleBarClickListener() {

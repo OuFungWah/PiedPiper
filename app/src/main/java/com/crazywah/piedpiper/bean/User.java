@@ -1,5 +1,7 @@
 package com.crazywah.piedpiper.bean;
 
+import android.text.TextUtils;
+
 import java.util.Date;
 
 public class User {
@@ -85,23 +87,42 @@ public class User {
      */
     private String remark;
     /**
-     * 请求好友时间
-     */
-    private Date requestTime;
-    /**
      * 添加为好友的时间
      */
     private Date friendTime;
+
+    /*---------以下属性来自好友请求表------------*/
+
     /**
      * 请求信息
      */
     private String requestMessage;
+    /**
+     * 请求好友时间
+     */
+    private Date requestTime;
+    /**
+     * 请求状态
+     */
+    private int requestStatus;
+
+    public int getRequestStatus() {
+        return requestStatus;
+    }
+
+    public void setRequestStatus(int requestStatus) {
+        this.requestStatus = requestStatus;
+    }
 
     public long getMemberId() {
         return memberId;
     }
 
     public void setMemberId(long memberId) {
+        this.memberId = memberId;
+    }
+
+    public void setMemberId(Long memberId) {
         this.memberId = memberId;
     }
 
@@ -189,6 +210,10 @@ public class User {
         this.gender = gender;
     }
 
+    public void setGender(Integer gender) {
+        this.gender = gender;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -210,6 +235,10 @@ public class User {
     }
 
     public void setRelation(int relation) {
+        this.relation = relation;
+    }
+
+    public void setRelation(Integer relation) {
         this.relation = relation;
     }
 
@@ -254,7 +283,7 @@ public class User {
     }
 
     public String getName() {
-        return getAlias() == null ? (getNickname() == null ? getAccountId() : getNickname()) : getAlias();
+        return TextUtils.isEmpty(getAlias()) ? ((TextUtils.isEmpty(getNickname()) ? getAccountId() : getNickname())) : getAlias();
     }
 
     @Override

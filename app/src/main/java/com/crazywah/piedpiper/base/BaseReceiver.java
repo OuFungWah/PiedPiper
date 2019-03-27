@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import com.crazywah.piedpiper.bean.CustomNotificationBean;
 import com.crazywah.piedpiper.bean.MessageBean;
 import com.crazywah.piedpiper.common.PiedToast;
 import com.crazywah.piedpiper.util.NotificationUtil;

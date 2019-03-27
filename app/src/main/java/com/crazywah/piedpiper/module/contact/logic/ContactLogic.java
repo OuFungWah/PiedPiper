@@ -1,4 +1,4 @@
-package com.crazywah.piedpiper.module.contact;
+package com.crazywah.piedpiper.module.contact.logic;
 
 import android.content.Context;
 import android.graphics.BitmapFactory;
@@ -9,6 +9,7 @@ import com.crazywah.piedpiper.base.BaseLogic;
 import com.crazywah.piedpiper.bean.User;
 import com.crazywah.piedpiper.common.PiedCallback;
 import com.crazywah.piedpiper.common.RequestManager;
+import com.crazywah.piedpiper.database.service.UserDBService;
 import com.crazywah.piedpiper.module.contact.activity.FriendRequestActivity;
 import com.crazywah.piedpiper.bean.NormalEntrance;
 
@@ -51,6 +52,7 @@ public class ContactLogic extends BaseLogic {
             @Override
             public void onSuccess(List<User> result) {
                 friendList = result;
+                UserDBService.newInstance().addUsers(result);
                 notifyUi(MSG_GET_FRIENDS_SUCC);
             }
 

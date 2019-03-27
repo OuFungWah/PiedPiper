@@ -83,6 +83,7 @@
         <activity android:name=".module.contact.activity.FriendRequestActivity" />
         <activity android:name=".module.user.activity.UserInfoActivity" />
         <activity android:name=".module.user.activity.ModifyInfoActivity" />
+        <activity android:name=".module.homepage.activity.SearchActivity" />
 
         <!-- APP key, 可以在这里设置，也可以在 SDKOptions 中提供。
            如果 SDKOptions 中提供了，取 SDKOptions 中的值。 -->
@@ -124,6 +125,7 @@
         <!-- 云信进程间通信service -->
         <service android:name="com.netease.nimlib.service.ResponseService" />
         <service android:name=".base.MessageService" />
+        <service android:name=".base.CustomMessageService" />
 
         <!-- 云信进程间通信provider -->
         <!-- android:authorities="{包名}.ipc.provider", 请将com.netease.nim.demo替换为自己的包名 -->

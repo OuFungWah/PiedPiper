@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 
 import com.crazywah.piedpiper.base.BaseReceiver;
+import com.crazywah.piedpiper.base.CustomMessageService;
 import com.crazywah.piedpiper.base.MessageService;
 import com.crazywah.piedpiper.common.PiedToast;
 import com.crazywah.piedpiper.common.RequestManager;
@@ -34,6 +35,7 @@ public class PiedPiperApplication extends Application {
         NIMClient.toggleNotification(false);
         combineBaseReceiver();
         this.startService(new Intent(this, MessageService.class));
+        this.startService(new Intent(this, CustomMessageService.class));
         RequestManager.getInstance().init(this);
         NotificationUtil.init();
     }

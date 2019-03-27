@@ -4,7 +4,10 @@ public class PiedEvent {
 
     public enum EventType {
         MSG_NOTIFY_REGISTRANT_UPDATE,
-        MSG_AFTER_SELECT_DATE
+        MSG_AFTER_SELECT_DATE,
+        MSG_RECEIVE_FRIEND_REQUEST,
+        MSG_RECEIVE_FRIEND_HANDLE_REQUEST,
+        MSG_UPDATE_FRIEND_LIST
     }
 
     private EventType type;

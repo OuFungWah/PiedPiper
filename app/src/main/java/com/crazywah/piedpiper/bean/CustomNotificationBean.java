@@ -2,15 +2,24 @@ package com.crazywah.piedpiper.bean;
 
 public class CustomNotificationBean {
 
-    private int id;
+    private CustomMessageType type;
+    private String fromName;
     private String content;
 
-    public int getId() {
-        return id;
+    public CustomMessageType getType() {
+        return type;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setType(CustomMessageType type) {
+        this.type = type;
+    }
+
+    public String getFromName() {
+        return fromName;
+    }
+
+    public void setFromName(String fromName) {
+        this.fromName = fromName;
     }
 
     public String getContent() {

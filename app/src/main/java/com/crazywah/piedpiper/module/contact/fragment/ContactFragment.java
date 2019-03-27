@@ -1,4 +1,4 @@
-package com.crazywah.piedpiper.module.contact;
+package com.crazywah.piedpiper.module.contact.fragment;
 
 import android.os.Bundle;
 import android.os.Message;
@@ -13,7 +13,11 @@ import android.view.ViewGroup;
 
 import com.crazywah.piedpiper.R;
 import com.crazywah.piedpiper.base.BaseFragment;
+import com.crazywah.piedpiper.common.PiedEvent;
 import com.crazywah.piedpiper.module.contact.adapter.ContactListAdapter;
+import com.crazywah.piedpiper.module.contact.logic.ContactLogic;
+
+import org.greenrobot.eventbus.EventBus;
 
 public class ContactFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
 
@@ -38,6 +42,7 @@ public class ContactFragment extends BaseFragment implements SwipeRefreshLayout.
             case ContactLogic.MSG_GET_FRIENDS_SUCC:
                 adapter.setList(logic.getObjects());
                 adapter.notifyDataSetChanged();
+                EventBus.getDefault().post(new PiedEvent(PiedEvent.EventType.MSG_UPDATE_FRIEND_LIST));
                 refreshLayout.setRefreshing(false);
                 break;
             case ContactLogic.MSG_GET_FRIENDS_FAIL:

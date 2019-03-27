@@ -8,12 +8,16 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.crazywah.piedpiper.bean.User;
-import com.crazywah.piedpiper.module.chatroom.request.FriendListRequest;
+import com.crazywah.piedpiper.module.chatroom.request.GetUsersByRelationRequest;
 import com.crazywah.piedpiper.module.chatroom.request.PicUpLoadRequest;
 import com.crazywah.piedpiper.module.chatroom.request.UserInfoRequest;
+import com.crazywah.piedpiper.module.contact.request.FriendListRequest;
+import com.crazywah.piedpiper.module.contact.request.HandleFriendRequest;
 import com.crazywah.piedpiper.module.homepage.request.GetAllInfoRequest;
+import com.crazywah.piedpiper.module.homepage.request.GetStrangersRequest;
 import com.crazywah.piedpiper.module.login.request.LoginRequest;
 import com.crazywah.piedpiper.module.register.request.RegisterRequest;
+import com.crazywah.piedpiper.module.user.request.AddFriendRequest;
 import com.crazywah.piedpiper.module.user.request.UpdateAddressRequest;
 import com.crazywah.piedpiper.module.user.request.UpdateBirthdayRequest;
 import com.crazywah.piedpiper.module.user.request.UpdateEmailRequest;
@@ -131,7 +135,7 @@ public class RequestManager {
     }
 
     public void getFriends(final PiedCallback<List<User>> callback) {
-        FriendListRequest request = new FriendListRequest(new Response.Listener<List<User>>() {
+        GetUsersByRelationRequest request = new GetUsersByRelationRequest(1, new Response.Listener<List<User>>() {
             @Override
             public void onResponse(List<User> response) {
                 callback.onSuccess(response);
@@ -254,6 +258,66 @@ public class RequestManager {
         UpdateBirthdayRequest request = new UpdateBirthdayRequest(date, new Response.Listener<Void>() {
             @Override
             public void onResponse(Void response) {
+                callback.onSuccess(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                callback.onFail(error.getMessage());
+            }
+        });
+        addRequest(request);
+    }
+
+    public void sendFriendRequest(String originId, String targetId, String requestMessage, final PiedCallback<Void> callback) {
+        AddFriendRequest request = new AddFriendRequest(originId, targetId, requestMessage, new Response.Listener<Void>() {
+            @Override
+            public void onResponse(Void response) {
+                callback.onSuccess(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                callback.onFail(error.getMessage());
+            }
+        });
+        addRequest(request);
+    }
+
+    public void handleFriendRequest(String toId, int result, String attach, final PiedCallback<Void> callback) {
+        HandleFriendRequest request = new HandleFriendRequest(toId, result, attach, new Response.Listener<Void>() {
+            @Override
+            public void onResponse(Void response) {
+                callback.onSuccess(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                callback.onFail(error.getMessage());
+            }
+        });
+        addRequest(request);
+    }
+
+    public void getAllFriendRequests(final PiedCallback<List<User>> callback) {
+        FriendListRequest request = new FriendListRequest(new Response.Listener<List<User>>() {
+            @Override
+            public void onResponse(List<User> response) {
+                callback.onSuccess(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                callback.onFail(error.getMessage());
+            }
+        });
+        addRequest(request);
+    }
+
+    public void searchStrangers(String id, final PiedCallback<List<User>> callback) {
+        GetStrangersRequest request = new GetStrangersRequest(id, new Response.Listener<List<User>>() {
+            @Override
+            public void onResponse(List<User> response) {
                 callback.onSuccess(response);
             }
         }, new Response.ErrorListener() {

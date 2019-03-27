@@ -5,7 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.crazywah.piedpiper.module.chat.fragment.ChatFragment;
-import com.crazywah.piedpiper.module.contact.ContactFragment;
+import com.crazywah.piedpiper.module.contact.fragment.ContactFragment;
 import com.crazywah.piedpiper.module.homepage.fragment.DiscoveryFragment;
 
 public class HomePagerAdapter extends FragmentPagerAdapter {

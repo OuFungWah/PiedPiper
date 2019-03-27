@@ -17,9 +17,9 @@ import java.util.List;
 
 public class MainBottomView extends LinearLayout implements View.OnClickListener {
 
-    private static final int INDEX_CHAT = 0;
-    private static final int INDEX_CONTACT = 1;
-    private static final int INDEX_DISCOVERY = 2;
+    public static final int INDEX_CHAT = 0;
+    public static final int INDEX_CONTACT = 1;
+    public static final int INDEX_DISCOVERY = 2;
 
     private static final int[] ICON_UNCHECKED_RES = new int[]{
             R.drawable.ic_chat_grey,

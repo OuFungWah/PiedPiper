@@ -25,8 +25,10 @@ public class RequestUrl {
     public static final String URL_UPDATE_EMAIL = (DEV ? DEV_HOST : HOST) + "/account/updateEmail";
     public static final String URL_UPLOAD_PIC = (DEV ? DEV_HOST : HOST) + "/common/uploadPic";
     public static final String URL_GET_USERS_BY_RELATION = (DEV ? DEV_HOST : HOST) + "/user/getUsersByRelation";
+    public static final String URL_GET_STRANGERS = (DEV ? DEV_HOST : HOST) + "/user/searchStrangers";
     public static final String URL_GET_USER_BY_ID = (DEV ? DEV_HOST : HOST) + "/user/getSingleUserById";
     public static final String URL_ADD_FRIEND = (DEV ? DEV_HOST : HOST) + "/friend/addFriend";
+    public static final String URL_GET_ALL_REQUEST = (DEV ? DEV_HOST : HOST) + "/friend/getAllRequest";
     public static final String URL_HANDLE_REQUEST = (DEV ? DEV_HOST : HOST) + "/friend/handleRequest";
     public static final String URL_POST_MOMENT = (DEV ? DEV_HOST : HOST) + "/moment/postMoment";
     public static final String URL_GET_MOMENTS = (DEV ? DEV_HOST : HOST) + "/moment/getMomentsByToken";

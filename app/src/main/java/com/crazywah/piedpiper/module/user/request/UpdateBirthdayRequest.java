@@ -22,14 +22,9 @@ public class UpdateBirthdayRequest extends RequestBase<Void> {
     }
 
     @Override
-    public byte[] getBody() {
-        User user = new User();
-        user.setBirthday(date);
-        return new Gson().toJson(user).getBytes(Charset.forName("utf-8"));
-    }
-
-    @Override
     public Map<String, String> getParam() {
-        return null;
+        Map<String, String> map = new HashMap<>();
+        map.put("time", date.getTime() + "");
+        return map;
     }
 }

@@ -6,12 +6,15 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.crazywah.piedpiper.R;
 import com.crazywah.piedpiper.base.BaseFragment;
+import com.crazywah.piedpiper.common.PiedEvent;
+import com.crazywah.piedpiper.common.PiedToast;
 import com.crazywah.piedpiper.module.chat.adapter.RecentContactAdapter;
 import com.crazywah.piedpiper.module.chat.logic.ChatFragmentLogic;
 import com.netease.nimlib.sdk.NIMClient;
@@ -22,6 +25,8 @@ import com.netease.nimlib.sdk.msg.model.RecentContact;
 import java.util.List;
 
 public class ChatFragment extends BaseFragment implements Observer<List<RecentContact>> {
+
+    private static final String TAG = "ChatFragment";
 
     private ChatFragmentLogic logic;
     private RecyclerView recentChatListRv;
@@ -35,7 +40,7 @@ public class ChatFragment extends BaseFragment implements Observer<List<RecentCo
     protected boolean onHandle(Message msg) {
         switch (msg.what) {
             case ChatFragmentLogic.LOAD_RECENT_CONTACTS_SUCC:
-                adapter.notifyDataSetChanged();
+                updateView();
                 break;
             case ChatFragmentLogic.LOAD_RECENT_CONTACTS_FAIL:
                 break;
@@ -43,6 +48,10 @@ public class ChatFragment extends BaseFragment implements Observer<List<RecentCo
                 break;
         }
         return false;
+    }
+
+    private void updateView() {
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -86,6 +95,19 @@ public class ChatFragment extends BaseFragment implements Observer<List<RecentCo
     @Override
     public void prepareLogic() {
         logic = new ChatFragmentLogic(getContext(), handler);
+    }
+
+    @Override
+    public void onEvent(PiedEvent event) {
+        switch (event.getType()) {
+            case MSG_UPDATE_FRIEND_LIST:
+//                PiedToast.showShort("收到更新好友通知");
+                Log.d(TAG, "onEvent: 收到更新好友通知");
+                updateView();
+                break;
+            default:
+                break;
+        }
     }
 
     @Override

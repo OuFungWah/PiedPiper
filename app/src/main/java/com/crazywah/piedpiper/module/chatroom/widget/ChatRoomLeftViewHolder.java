@@ -25,13 +25,15 @@ public class ChatRoomLeftViewHolder extends RecyclerView.ViewHolder {
 
     public void setView(IMMessage message, final User user) {
         contentTv.setText(message.getContent());
-        ImageLoader.loadCircle(user.getAvatar(), avatarImg);
-        avatarImg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                UserInfoActivity.launch(itemView.getContext(), user.getAccountId());
-            }
-        });
+        if (user != null) {
+            ImageLoader.loadUserAvatar(user, avatarImg);
+            avatarImg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    UserInfoActivity.launch(itemView.getContext(), user.getAccountId());
+                }
+            });
+        }
     }
 
 }

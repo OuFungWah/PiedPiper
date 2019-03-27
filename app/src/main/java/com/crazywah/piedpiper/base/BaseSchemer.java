@@ -14,6 +14,7 @@ public abstract class BaseSchemer {
 
     public static final String LAUNCH_APP = "/launch";
     public static final String CHATROOM = "/chat_room";
+    public static final String FRIEND_REQUEST = "/friend_request";
 
     public void launch(Context context) {
         Intent intent = ((BaseActivity) context).getIntent();
@@ -23,11 +24,15 @@ public abstract class BaseSchemer {
             launchApp(context);
         } else if (uri.getPath().equals(CHATROOM)) {
             launchChatRoom(context);
+        } else if (uri.getPath().equals(FRIEND_REQUEST)) {
+            launchFriendRequest(context);
         }
     }
 
     public abstract void launchApp(Context context);
 
     public abstract void launchChatRoom(Context context);
+
+    public abstract void launchFriendRequest(Context context);
 
 }

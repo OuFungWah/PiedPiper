@@ -19,7 +19,7 @@ import com.netease.nimlib.sdk.msg.model.IMMessage;
 
 import java.util.List;
 
-public class MessageService extends Service implements Observer<List<IMMessage>> {
+public class MessageService extends Service implements Observer<List<IMMessage>>{
 
     private static final String TAG = "MessageService";
 

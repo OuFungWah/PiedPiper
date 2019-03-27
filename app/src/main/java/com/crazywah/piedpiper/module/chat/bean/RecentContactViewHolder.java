@@ -10,7 +10,9 @@ import android.widget.TextView;
 import com.crazywah.piedpiper.R;
 import com.crazywah.piedpiper.application.PiedPiperApplication;
 import com.crazywah.piedpiper.bean.User;
+import com.crazywah.piedpiper.database.service.UserDBService;
 import com.crazywah.piedpiper.module.chatroom.activity.ChatRoomActivity;
+import com.crazywah.piedpiper.module.user.activity.UserInfoActivity;
 import com.crazywah.piedpiper.util.DensityUtils;
 import com.crazywah.piedpiper.util.ImageLoader;
 import com.crazywah.piedpiper.util.MessageUtil;
@@ -47,7 +49,10 @@ public class RecentContactViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void updateView(final RecentContact recentContact) {
-        nameTv.setText(recentContact.getFromNick());
+        final User user = UserDBService.newInstance().selectUser(recentContact.getContactId());
+        Log.d(TAG, "updateView: user : " + new Gson().toJson(user));
+        nameTv.setText(user != null ? user.getName() : "Unknown");
+        ImageLoader.loadUserAvatar(user != null ? user : new User(), avatarImg);
         contentTv.setText(recentContact.getContent());
         String timeStr;
         Date today = new Date(System.currentTimeMillis());
@@ -67,8 +72,7 @@ public class RecentContactViewHolder extends RecyclerView.ViewHolder {
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                IMMessage imMessage = MessageBuilder.createEmptyMessage(recentContact.getContactId(), SessionTypeEnum.P2P, recentContact.getTime());
-                ChatRoomActivity.launch(itemView.getContext(), recentContact.getContactId(), imMessage);
+                ChatRoomActivity.launch(itemView.getContext(), recentContact.getContactId());
             }
         });
         itemView.setOnLongClickListener(new View.OnLongClickListener() {
@@ -78,5 +82,13 @@ public class RecentContactViewHolder extends RecyclerView.ViewHolder {
                 return true;
             }
         });
+        if (user != null) {
+            avatarImg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    UserInfoActivity.launch(itemView.getContext(), user.getAccountId());
+                }
+            });
+        }
     }
 }

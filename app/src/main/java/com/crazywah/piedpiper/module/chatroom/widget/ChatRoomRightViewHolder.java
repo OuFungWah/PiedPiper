@@ -24,7 +24,7 @@ public class ChatRoomRightViewHolder extends RecyclerView.ViewHolder implements 
 
     public void setView(IMMessage message) {
         contentTv.setText(message.getContent());
-        ImageLoader.loadCircle(PiedPiperApplication.getLoginUser().getAvatar(), avatarImg);
+        ImageLoader.loadUserAvatar(PiedPiperApplication.getLoginUser(), avatarImg);
         avatarImg.setOnClickListener(this);
     }
 

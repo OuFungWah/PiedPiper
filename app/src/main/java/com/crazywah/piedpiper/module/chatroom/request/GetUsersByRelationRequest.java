@@ -9,16 +9,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class FriendListRequest extends RequestBase<List<User>> {
+public class GetUsersByRelationRequest extends RequestBase<List<User>> {
 
-    public FriendListRequest(Response.Listener<List<User>> listener, Response.ErrorListener errorListener) {
+    private int relation = 0;
+
+    public GetUsersByRelationRequest(int relation, Response.Listener<List<User>> listener, Response.ErrorListener errorListener) {
         super(RequestUrl.URL_GET_USERS_BY_RELATION, listener, errorListener);
+        this.relation = relation;
     }
 
     @Override
     public Map<String, String> getParam() {
         Map<String, String> map = new HashMap<>();
-        map.put("relation","0");
+        map.put("relation", relation + "");
         return map;
     }
 }

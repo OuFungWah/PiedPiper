@@ -54,14 +54,12 @@ public class ChatRoomActivity extends BaseActivity implements View.OnClickListen
 
     private ChatRoomLogic logic;
     private String targetId;
-    private IMMessage latestMessage;
     private Gson parser;
 
-    public static void launch(Context context, String id, IMMessage message) {
+    public static void launch(Context context, String id) {
         Intent intent = new Intent(context, ChatRoomActivity.class);
         Bundle bundle = new Bundle();
         bundle.putString(KEY_ID, id);
-        bundle.putSerializable(KEY_LATEST_MESSAGE, message);
         intent.putExtras(bundle);
         context.startActivity(intent);
     }
@@ -93,9 +91,6 @@ public class ChatRoomActivity extends BaseActivity implements View.OnClickListen
 
     private void handleParams() {
         targetId = getIntent().getExtras().getString(KEY_ID);
-        if (getIntent().getExtras().containsKey(KEY_LATEST_MESSAGE)) {
-            latestMessage = (IMMessage) getIntent().getExtras().getSerializable(KEY_LATEST_MESSAGE);
-        }
     }
 
     private void initView() {
@@ -128,7 +123,7 @@ public class ChatRoomActivity extends BaseActivity implements View.OnClickListen
         switch (msg.what) {
             case ChatRoomLogic.MSG_GET_USER_INFO_SUCC:
                 updateUserInfoView(logic.getTarget());
-                ImageLoader.loadCircle(logic.getTarget().getAvatar(), titleAvatarImg);
+                ImageLoader.loadUserAvatar(logic.getTarget(), titleAvatarImg);
                 titleAvatarImg.setOnClickListener(this);
                 adapter.notifyDataSetChanged();
                 break;

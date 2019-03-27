@@ -9,5 +9,13 @@
     <color name="colorDialogBackground">#45000000</color>
     <color name="icons">#FFFFFF</color>
     <color name="divider">#BDBDBD</color>
+    <color name="colorPurple">#825AF6</color>
+    <color name="colorGreen">#7CD153</color>
+    <color name="colorRed">#EB5D70</color>
+    <color name="colorSapphireBlue">#3884F7</color>
+    <color name="colorSkyBlue">#55BDF9</color>
+    <color name="colorBlack">#000000</color>
+    <color name="colorGrey">#878E98</color>
+    <color name="colorTransparent">#00000000</color>
 
 </resources>
