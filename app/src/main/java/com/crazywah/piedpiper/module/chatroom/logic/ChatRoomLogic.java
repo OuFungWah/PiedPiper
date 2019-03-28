@@ -11,6 +11,7 @@ import com.crazywah.piedpiper.bean.User;
 import com.crazywah.piedpiper.common.PiedCallback;
 import com.crazywah.piedpiper.common.PiedToast;
 import com.crazywah.piedpiper.common.RequestManager;
+import com.crazywah.piedpiper.database.service.UserDBService;
 import com.crazywah.piedpiper.util.MessageUtil;
 import com.google.gson.Gson;
 import com.netease.nimlib.sdk.NIMClient;
@@ -43,20 +44,26 @@ public class ChatRoomLogic extends BaseLogic {
     }
 
     public void getTargetInfo(String targetId) {
-        RequestManager.getInstance().getUserInfo(targetId, new PiedCallback<User>() {
-            @Override
-            public void onSuccess(User object) {
-                target = object;
-                notifyUi(MSG_GET_USER_INFO_SUCC);
-            }
+        User dbSave = UserDBService.newInstance().selectUser(targetId);
+        if (dbSave != null) {
+            target = dbSave;
+            notifyUi(MSG_GET_USER_INFO_SUCC);
+        } else {
+            RequestManager.getInstance().getUserInfo(targetId, new PiedCallback<User>() {
+                @Override
+                public void onSuccess(User object) {
+                    target = object;
+                    notifyUi(MSG_GET_USER_INFO_SUCC);
+                }
 
-            @Override
-            public boolean onFail(String message) {
-                PiedToast.showShort(message);
-                notifyUi(MSG_GET_USER_INFO_FAIL);
-                return false;
-            }
-        });
+                @Override
+                public boolean onFail(String message) {
+                    PiedToast.showShort(message);
+                    notifyUi(MSG_GET_USER_INFO_FAIL);
+                    return false;
+                }
+            });
+        }
     }
 
     public IMMessage doSend(String targetId, String content) {

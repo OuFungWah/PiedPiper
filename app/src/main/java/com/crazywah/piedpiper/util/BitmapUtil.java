@@ -90,7 +90,7 @@ public class BitmapUtil {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         image.compress(Bitmap.CompressFormat.JPEG, 100, baos);//质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
         int options = 100;
-        while (baos.toByteArray().length / 1024 > 100) {  //循环判断如果压缩后图片是否大于100kb,大于继续压缩
+        while (baos.toByteArray().length / 1024 > 100 && options >= 0) {  //循环判断如果压缩后图片是否大于100kb,大于继续压缩
             baos.reset();//重置baos即清空baos
             //第一个参数 ：图片格式 ，第二个参数： 图片质量，100为最高，0为最差  ，第三个参数：保存压缩后的数据的流
             image.compress(Bitmap.CompressFormat.JPEG, options, baos);//这里压缩options%，把压缩后的数据存放到baos中
@@ -338,8 +338,7 @@ public class BitmapUtil {
     /**
      * 读取图片的旋转的角度
      *
-     * @param path
-     *            图片绝对路径
+     * @param path 图片绝对路径
      * @return 图片的旋转角度
      */
     public static int getBitmapDegree(String path) {
@@ -370,10 +369,8 @@ public class BitmapUtil {
     /**
      * 将图片按照某个角度进行旋转
      *
-     * @param bm
-     *            需要旋转的图片
-     * @param degree
-     *            旋转角度
+     * @param bm     需要旋转的图片
+     * @param degree 旋转角度
      * @return 旋转后的图片
      */
     public static Bitmap rotateBitmapByDegree(Bitmap bm, int degree) {

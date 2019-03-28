@@ -40,10 +40,8 @@ public class ContactFragment extends BaseFragment implements SwipeRefreshLayout.
     protected boolean onHandle(Message msg) {
         switch (msg.what) {
             case ContactLogic.MSG_GET_FRIENDS_SUCC:
-                adapter.setList(logic.getObjects());
-                adapter.notifyDataSetChanged();
+                updateView();
                 EventBus.getDefault().post(new PiedEvent(PiedEvent.EventType.MSG_UPDATE_FRIEND_LIST));
-                refreshLayout.setRefreshing(false);
                 break;
             case ContactLogic.MSG_GET_FRIENDS_FAIL:
                 refreshLayout.setRefreshing(false);
@@ -52,6 +50,16 @@ public class ContactFragment extends BaseFragment implements SwipeRefreshLayout.
                 break;
         }
         return false;
+    }
+
+    private void loadData() {
+        logic.loadFriendList();
+    }
+
+    private void updateView() {
+        adapter.setList(logic.getObjects());
+        adapter.notifyDataSetChanged();
+        refreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -82,7 +90,17 @@ public class ContactFragment extends BaseFragment implements SwipeRefreshLayout.
     }
 
     @Override
+    public void onEvent(PiedEvent event) {
+        switch (event.getType()) {
+            case MSG_UPDATE_FRIEND_LIST:
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
     public void onRefresh() {
-        logic.loadFriendList();
+        loadData();
     }
 }

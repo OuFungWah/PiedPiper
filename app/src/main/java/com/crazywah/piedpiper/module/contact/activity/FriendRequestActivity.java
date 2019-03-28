@@ -18,6 +18,8 @@ import com.crazywah.piedpiper.module.contact.adapter.FriendRequestListAdapter;
 import com.crazywah.piedpiper.module.contact.logic.FriendRequestLogic;
 import com.crazywah.piedpiper.widget.TitleBarNormalView;
 
+import org.greenrobot.eventbus.EventBus;
+
 public class FriendRequestActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener {
 
     private FriendRequestLogic logic;
@@ -98,6 +100,7 @@ public class FriendRequestActivity extends BaseActivity implements SwipeRefreshL
                 break;
             case FriendRequestLogic.MSG_HANDLE_SUCC:
                 logic.loadRequestList();
+                EventBus.getDefault().post(new PiedEvent(PiedEvent.EventType.MSG_UPDATE_FRIEND_LIST));
                 break;
             case FriendRequestLogic.MSG_HANDLE_FAIL:
                 PiedToast.showErrorShort("处理请求失败");

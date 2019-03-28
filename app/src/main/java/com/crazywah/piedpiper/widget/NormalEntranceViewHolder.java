@@ -97,6 +97,7 @@ public class NormalEntranceViewHolder extends RecyclerView.ViewHolder implements
         }
         if (!TextUtils.isEmpty(entrance.getContent())) {
             contentTv.setText(entrance.getContent());
+            contentTv.setVisibility(View.VISIBLE);
         } else {
             contentTv.setVisibility(View.GONE);
         }

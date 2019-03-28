@@ -53,6 +53,12 @@ public abstract class DBBaseService<T> {
         return flag;
     }
 
+    public boolean clearDB(){
+        boolean flag;
+        flag = dao.delete(getTable(), null, null);
+        return flag;
+    }
+
     public List<T> selectAll(T t) {
         return select(t, null, null, null, null, null);
     }
@@ -157,18 +163,22 @@ public abstract class DBBaseService<T> {
      */
     private ContentValues fromT(T t) {
         ContentValues contentValues = new ContentValues();
-        try {
-            Class tClass = t.getClass();
-            for (Field field : tClass.getDeclaredFields()) {
-                field.setAccessible(true);
-                Object value = field.get(t);
-                String valueName = field.getName();
-                if (isUsefull(valueName)) {
-                    put(contentValues, valueName, value);
+        if (t != null) {
+            try {
+                Class tClass = t.getClass();
+                for (Field field : tClass.getDeclaredFields()) {
+                    field.setAccessible(true);
+                    Object value = field.get(t);
+                    String valueName = field.getName();
+                    if (isUsefull(valueName)) {
+                        put(contentValues, valueName, value);
+                    }
                 }
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
             }
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+        } else {
+            return null;
         }
         return contentValues;
     }

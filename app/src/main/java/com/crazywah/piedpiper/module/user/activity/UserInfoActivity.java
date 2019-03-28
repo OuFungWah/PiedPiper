@@ -10,6 +10,7 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -28,6 +29,7 @@ import com.crazywah.piedpiper.common.PiedCallback;
 import com.crazywah.piedpiper.common.PiedEvent;
 import com.crazywah.piedpiper.common.PiedToast;
 import com.crazywah.piedpiper.common.RequestManager;
+import com.crazywah.piedpiper.database.service.UserDBService;
 import com.crazywah.piedpiper.module.chatroom.activity.ChatRoomActivity;
 import com.crazywah.piedpiper.module.user.adapter.UserInfoEntranceAdapter;
 import com.crazywah.piedpiper.module.user.logic.UserInfoLogic;
@@ -38,7 +40,9 @@ import com.crazywah.piedpiper.widget.NormalDialog;
 import com.crazywah.piedpiper.widget.PhotoDialog;
 import com.google.gson.Gson;
 
-public class UserInfoActivity extends BaseActivity implements View.OnClickListener {
+import org.greenrobot.eventbus.EventBus;
+
+public class UserInfoActivity extends BaseActivity implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     public static final String KEY_ID = "key_id";
 
@@ -47,6 +51,8 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
     private TextView accountIdTv;
     private NestedScrollView scrollView;
     private RecyclerView infoListRv;
+    private View finishView;
+    private SwipeRefreshLayout refreshLayout;
 
     private UserInfoLogic logic;
     private UserInfoEntranceAdapter adapter;
@@ -77,6 +83,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                 break;
             case UserInfoLogic.MSG_UPLOAD_AVATAR_SUCC:
                 updateView();
+                EventBus.getDefault().post(new PiedEvent(PiedEvent.EventType.MSG_NOTIFY_REGISTRANT_UPDATE));
                 break;
             case UserInfoLogic.MSG_UPLOAD_AVATAR_FAIL:
                 break;
@@ -90,6 +97,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
             default:
                 break;
         }
+        refreshLayout.setRefreshing(false);
         return false;
     }
 
@@ -109,10 +117,18 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
         addDependence(photoDenpendence);
         initView();
         setView();
+        loadData();
+    }
+
+    private void loadData() {
         //获取数据
-        if (id.equals(PiedPiperApplication.getLoginUser().getAccountId())) {
+        if (isMe) {
             logic.afterGetUserData(PiedPiperApplication.getLoginUser());
         } else {
+            User dbSave = UserDBService.newInstance().selectUser(id);
+            if (dbSave != null) {
+                logic.afterGetUserData(dbSave);
+            }
             logic.loadUserInfo(id);
         }
     }
@@ -130,12 +146,15 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
         scrollView = findViewById(R.id.user_info_scrollview);
         addFriendFab = findViewById(R.id.user_info_add_friend_request_fab);
         sendMessageFab = findViewById(R.id.user_info_send_message_fab);
+        finishView = findViewById(R.id.user_info_finish_tv);
+        refreshLayout = findViewById(R.id.user_info_refresh_view);
         sendRequestDialog = new NormalDialog(this, R.style.NormalDialogBgStyle);
         adapter = new UserInfoEntranceAdapter(logic.getList());
         photoDialog = new PhotoDialog(this, R.style.PickPhotoDialog);
     }
 
     private void setView() {
+        scrollView.setVisibility(View.GONE);
         infoListRv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false) {
             @Override
             public boolean canScrollVertically() {
@@ -143,13 +162,19 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
             }
         });
         infoListRv.setAdapter(adapter);
+
         avatarImg.setOnClickListener(this);
         addFriendFab.setOnClickListener(this);
         sendMessageFab.setOnClickListener(this);
+        finishView.setOnClickListener(this);
+
         photoDialog.setDependence(photoDenpendence);
-        if (!id.equals(PiedPiperApplication.getLoginUser().getAccountId())) {
+        if (!isMe) {
             photoDialog.hideTakeAndSelect();
         }
+
+        refreshLayout.setRefreshing(true);
+        refreshLayout.setOnRefreshListener(this);
         sendRequestDialog.init();
         sendRequestDialog.setTitle("发送好友请求");
         sendRequestDialog.setCallBack(new NormalDialog.CallBack() {
@@ -180,34 +205,39 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
 
     public void updateView() {
         User user = logic.getUser();
-        ImageLoader.loadUserAvatar(user, avatarImg);
-        nickNameTv.setText(user.getName());
-        accountIdTv.setText("ID：" + user.getAccountId());
-        if (isMe) {
-            addFriendFab.setVisibility(View.GONE);
-            sendMessageFab.setVisibility(View.GONE);
-        } else {
-            switch (user.getRelation()) {
-                case RELATIONSHIP.STRANGER:
-                    addFriendFab.setVisibility(View.VISIBLE);
-                    sendMessageFab.setVisibility(View.GONE);
-                    break;
-                case RELATIONSHIP.FRIEND:
-                case RELATIONSHIP.SPECIAL:
-                case RELATIONSHIP.STARED:
-                    sendMessageFab.setVisibility(View.VISIBLE);
-                    addFriendFab.setVisibility(View.GONE);
-                    break;
-                case RELATIONSHIP.BLACK:
-                    sendMessageFab.setVisibility(View.GONE);
-                    addFriendFab.setVisibility(View.GONE);
-                    break;
-                default:
-                    break;
+        if (user != null) {
+            scrollView.setVisibility(View.VISIBLE);
+            ImageLoader.loadUserAvatar(user, avatarImg);
+            nickNameTv.setText(user.getName());
+            accountIdTv.setText("ID：" + user.getAccountId());
+            if (isMe) {
+                addFriendFab.setVisibility(View.GONE);
+                sendMessageFab.setVisibility(View.GONE);
+            } else {
+                switch (user.getRelation()) {
+                    case RELATIONSHIP.STRANGER:
+                        addFriendFab.setVisibility(View.VISIBLE);
+                        sendMessageFab.setVisibility(View.GONE);
+                        break;
+                    case RELATIONSHIP.FRIEND:
+                    case RELATIONSHIP.SPECIAL:
+                    case RELATIONSHIP.STARED:
+                        sendMessageFab.setVisibility(View.VISIBLE);
+                        addFriendFab.setVisibility(View.GONE);
+                        break;
+                    case RELATIONSHIP.BLACK:
+                        sendMessageFab.setVisibility(View.GONE);
+                        addFriendFab.setVisibility(View.GONE);
+                        break;
+                    default:
+                        break;
+                }
             }
+            adapter.setObjectList(logic.getList());
+            adapter.notifyItemRangeChanged(0, adapter.getItemCount());
+        } else {
+            scrollView.setVisibility(View.GONE);
         }
-        adapter.setObjectList(logic.getList());
-        adapter.notifyItemRangeChanged(0, adapter.getItemCount());
     }
 
     @Override
@@ -215,9 +245,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
         super.onEvent(event);
         switch (event.getType()) {
             case MSG_NOTIFY_REGISTRANT_UPDATE:
-                if (isMe) {
-                    logic.afterGetUserData(PiedPiperApplication.getLoginUser());
-                }
+                loadData();
                 break;
             default:
                 break;
@@ -241,8 +269,16 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
             case R.id.user_info_send_message_fab:
                 ChatRoomActivity.launch(this, id);
                 break;
+            case R.id.user_info_finish_tv:
+                onBackPressed();
+                break;
             default:
                 break;
         }
+    }
+
+    @Override
+    public void onRefresh() {
+        loadData();
     }
 }

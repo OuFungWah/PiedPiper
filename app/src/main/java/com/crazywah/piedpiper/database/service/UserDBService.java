@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.crazywah.piedpiper.application.PiedPiperApplication;
 import com.crazywah.piedpiper.bean.User;
+import com.crazywah.piedpiper.common.PiedToast;
 import com.crazywah.piedpiper.database.helper.PiedDBHelper;
 import com.google.gson.Gson;
 
@@ -23,7 +24,7 @@ public class UserDBService extends DBBaseService<User> {
         return PiedDBHelper.TABLE_NAME_USER;
     }
 
-    public void addUsers(List<User> users){
+    public void addUsers(List<User> users) {
         for (User user : users) {
             addOrUpdateUser(user);
         }

@@ -172,6 +172,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
             lastTime = System.currentTimeMillis();
         } else {
             super.onBackPressed();
+            UserDBService.newInstance().clearDB();
         }
     }
 
@@ -242,6 +243,14 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         } else {
             bottomView.hideUnRead(0);
         }
+    }
+
+    /**
+     * @param event
+     */
+    @Override
+    public void onEvent(PiedEvent event) {
+        updateView();
     }
 
     @Override

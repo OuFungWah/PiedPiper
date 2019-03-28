@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.crazywah.piedpiper.R;
 import com.crazywah.piedpiper.application.PiedPiperApplication;
@@ -14,6 +15,7 @@ import com.crazywah.piedpiper.bean.User;
 import com.crazywah.piedpiper.common.PiedCallback;
 import com.crazywah.piedpiper.common.PiedToast;
 import com.crazywah.piedpiper.common.RequestManager;
+import com.crazywah.piedpiper.database.service.UserDBService;
 import com.crazywah.piedpiper.module.user.activity.ModifyInfoActivity;
 
 import java.lang.reflect.Field;
@@ -28,6 +30,8 @@ import static com.crazywah.piedpiper.common.ConstValue.USER_INFO_METHOD;
 
 
 public class UserInfoLogic extends BaseLogic {
+
+    private static final String TAG = "UserInfoLogic";
 
     public static final int MSG_GET_USER_INFO_SUCC = 0;
     public static final int MSG_GET_USER_INFO_FAIL = 1;
@@ -135,9 +139,10 @@ public class UserInfoLogic extends BaseLogic {
                         String content = null;
                         if (result instanceof Date) {
                             content = new SimpleDateFormat("yyyy-MM-dd").format(result);
-                        } else if (result instanceof String) {
+                        } else if(result instanceof String){
                             content = (String) result;
                         }
+                        Log.d(TAG, "adjustEntrances: " + USER_INFO_METHOD[i] + " content " + content);
                         NormalEntrance entrance = (NormalEntrance) list.get(i);
                         if (!isMe && content == null) {
                             list.remove(entrance);

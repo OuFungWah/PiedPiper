@@ -303,7 +303,7 @@ public class ModifyInfoActivity extends BaseActivity implements View.OnClickList
                         break;
                     case ModifyInfoLogic.INFO_TYPE_ADDRESS:
                         if (checkInput("地址", firstStr, 0, 20)) {
-                            logic.updateMobile(firstStr);
+                            logic.updateAddress(firstStr);
                         }
                         break;
                     case ModifyInfoLogic.INFO_TYPE_EMAIL:

@@ -191,6 +191,7 @@ public class ChatRoomActivity extends BaseActivity implements View.OnClickListen
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        MessageUtil.getService().clearUnreadCount(targetId, SessionTypeEnum.P2P);
         NIMClient.getService(MsgServiceObserve.class).observeReceiveMessage(this, false);
     }
 }

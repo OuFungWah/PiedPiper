@@ -107,7 +107,8 @@ public class PhotoDenpendence implements BaseResultDependence {
      */
     protected void selectPicture(int resultCode, Intent data) {
         if (resultCode == RESULT_OK && data != null) {
-            if (imageUri != null && picBitmap != null) {
+            imageUri = data.getData();
+            if (imageUri != null) {
                 imageUri = data.getData();
                 try {
                     picBitmap = BitmapUtil.getBitmapFormUri(activity, imageUri);
@@ -117,6 +118,8 @@ public class PhotoDenpendence implements BaseResultDependence {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+            }else{
+                PiedToast.showErrorShort("选择图片失败");
             }
         } else {
             PiedToast.showErrorShort("选择图片失败");
