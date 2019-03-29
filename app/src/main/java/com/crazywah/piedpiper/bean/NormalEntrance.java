@@ -78,6 +78,15 @@ public class NormalEntrance {
     private CallBack callBack;
     private String backgroundColor;
     private boolean canClick;
+    private int unReadCount;
+
+    public int getUnReadCount() {
+        return unReadCount;
+    }
+
+    public void setUnReadCount(int unReadCount) {
+        this.unReadCount = unReadCount;
+    }
 
     public String getTitle() {
         return title;

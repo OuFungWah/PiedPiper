@@ -12,6 +12,7 @@ import com.crazywah.piedpiper.common.RequestManager;
 import com.crazywah.piedpiper.database.service.UserDBService;
 import com.crazywah.piedpiper.module.contact.activity.FriendRequestActivity;
 import com.crazywah.piedpiper.bean.NormalEntrance;
+import com.crazywah.piedpiper.module.contact.util.RequestCountUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +35,7 @@ public class ContactLogic extends BaseLogic {
     }
 
     public void initEntrance(final Context context) {
+        entranceList.clear();
         NormalEntrance entrance = new NormalEntrance();
         entrance.setIconBm(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_notifications_white));
         entrance.setBackgroundColor(NormalEntrance.getColor(NormalEntrance.YELLOW));
@@ -43,6 +45,7 @@ public class ContactLogic extends BaseLogic {
                 FriendRequestActivity.launch(context);
             }
         });
+        entrance.setUnReadCount(RequestCountUtil.getRequestUnRead());
         entrance.setTitle("好友请求");
         entranceList.add(entrance);
     }
@@ -70,6 +73,7 @@ public class ContactLogic extends BaseLogic {
     }
 
     private void combineObjects() {
+        initEntrance(context);
         objects.clear();
         objects.add("功能入口");
         objects.addAll(entranceList);

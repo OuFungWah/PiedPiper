@@ -18,6 +18,7 @@ import com.crazywah.piedpiper.common.PiedEvent;
 import com.crazywah.piedpiper.common.PiedToast;
 import com.crazywah.piedpiper.common.RequestManager;
 import com.crazywah.piedpiper.database.service.UserDBService;
+import com.crazywah.piedpiper.module.contact.util.RequestCountUtil;
 import com.crazywah.piedpiper.module.homepage.MainLogic;
 import com.crazywah.piedpiper.module.homepage.adapter.HomePagerAdapter;
 import com.crazywah.piedpiper.module.user.activity.UserInfoActivity;
@@ -25,6 +26,7 @@ import com.crazywah.piedpiper.util.BitmapUtil;
 import com.crazywah.piedpiper.util.MessageUtil;
 import com.crazywah.piedpiper.util.NotificationUtil;
 import com.crazywah.piedpiper.util.PhotoDenpendence;
+import com.crazywah.piedpiper.widget.BottomItemView;
 import com.crazywah.piedpiper.widget.MainBottomView;
 import com.crazywah.piedpiper.widget.PhotoDialog;
 import com.crazywah.piedpiper.widget.TitleBarView;
@@ -172,7 +174,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
             lastTime = System.currentTimeMillis();
         } else {
             super.onBackPressed();
-            UserDBService.newInstance().clearDB();
+            PiedPiperApplication.logout();
         }
     }
 
@@ -239,9 +241,14 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
 
     private void updateUnRead() {
         if (MessageUtil.getTotalUnReadCount() > 0) {
-            bottomView.showRedUnRead(0, MessageUtil.getTotalUnReadCount() + "");
+            bottomView.showRedUnRead(MainBottomView.INDEX_CHAT, MessageUtil.getTotalUnReadCount() + "");
         } else {
-            bottomView.hideUnRead(0);
+            bottomView.hideUnRead(MainBottomView.INDEX_CHAT);
+        }
+        if (RequestCountUtil.getRequestUnRead() > 0) {
+            bottomView.showGreenUnRead(MainBottomView.INDEX_CONTACT, RequestCountUtil.getRequestUnRead() + "");
+        } else {
+            bottomView.hideUnRead(MainBottomView.INDEX_CONTACT);
         }
     }
 
@@ -250,11 +257,13 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
      */
     @Override
     public void onEvent(PiedEvent event) {
-        switch (event.getType()){
+        switch (event.getType()) {
             case MSG_NOTIFY_REGISTRANT_UPDATE:
                 updateView();
                 break;
+            case MSG_RECEIVE_FRIEND_REQUEST:
             case MSG_UPDATE_UNREAD_COUNT:
+            case MSG_READ_FRIEND_REQUEST:
                 updateUnRead();
                 break;
         }

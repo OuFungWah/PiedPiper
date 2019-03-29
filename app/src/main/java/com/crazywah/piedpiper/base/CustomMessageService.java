@@ -7,7 +7,7 @@ import android.support.annotation.Nullable;
 
 import com.crazywah.piedpiper.bean.CustomNotificationBean;
 import com.crazywah.piedpiper.common.PiedEvent;
-import com.crazywah.piedpiper.common.PiedToast;
+import com.crazywah.piedpiper.module.contact.util.RequestCountUtil;
 import com.crazywah.piedpiper.util.NotificationUtil;
 import com.google.gson.Gson;
 import com.netease.nimlib.sdk.NIMClient;
@@ -45,9 +45,11 @@ public class CustomMessageService extends Service implements Observer<CustomNoti
         PiedEvent event;
         switch (bean.getType()) {
             case TYPE_FRIEND_REQUEST:
+                NotificationUtil.showFriendRequestNotification(bean.getFromName(), bean.getContent());
+                //保存本请求到本地,先保存，再更新未读
+                RequestCountUtil.addRequest(customNotification.getFromAccount(), customNotification.getTime());
                 event = new PiedEvent(PiedEvent.EventType.MSG_RECEIVE_FRIEND_REQUEST);
                 EventBus.getDefault().post(event);
-                NotificationUtil.showFriendRequestNotification(bean.getFromName(), bean.getContent());
                 break;
             case TYPE_HANDLE_FRIEND_REQUEST:
                 event = new PiedEvent(PiedEvent.EventType.MSG_RECEIVE_FRIEND_HANDLE_REQUEST);

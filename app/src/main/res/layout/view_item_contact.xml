@@ -66,8 +66,8 @@
 
         <com.crazywah.piedpiper.widget.UnReadView
             android:id="@+id/contact_head_unread"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
             android:layout_marginRight="11dp"
             android:visibility="gone" />
 

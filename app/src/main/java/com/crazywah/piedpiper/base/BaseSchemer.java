@@ -19,7 +19,7 @@ public abstract class BaseSchemer {
     public void launch(Context context) {
         Intent intent = ((BaseActivity) context).getIntent();
         Uri uri = intent.getData();
-        PiedToast.showShort(uri.getPath());
+//        PiedToast.showShort(uri.getPath());
         if (uri.getPath().equals(LAUNCH_APP)) {
             launchApp(context);
         } else if (uri.getPath().equals(CHATROOM)) {

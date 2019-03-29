@@ -16,6 +16,8 @@ import com.crazywah.piedpiper.common.PiedEvent;
 import com.crazywah.piedpiper.common.PiedToast;
 import com.crazywah.piedpiper.module.contact.adapter.FriendRequestListAdapter;
 import com.crazywah.piedpiper.module.contact.logic.FriendRequestLogic;
+import com.crazywah.piedpiper.module.contact.util.RequestCountUtil;
+import com.crazywah.piedpiper.module.homepage.activity.MainActivity;
 import com.crazywah.piedpiper.widget.TitleBarNormalView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -40,7 +42,12 @@ public class FriendRequestActivity extends BaseActivity implements SwipeRefreshL
         super.onCreate(savedInstanceState);
         initView();
         setView();
+        loadData();
+    }
+
+    private void loadData() {
         logic.loadRequestList();
+        RequestCountUtil.updateLastTime();
     }
 
     private void initView() {
@@ -99,7 +106,7 @@ public class FriendRequestActivity extends BaseActivity implements SwipeRefreshL
                 refreshLayout.setRefreshing(false);
                 break;
             case FriendRequestLogic.MSG_HANDLE_SUCC:
-                logic.loadRequestList();
+                loadData();
                 EventBus.getDefault().post(new PiedEvent(PiedEvent.EventType.MSG_UPDATE_FRIEND_LIST));
                 break;
             case FriendRequestLogic.MSG_HANDLE_FAIL:
@@ -129,7 +136,13 @@ public class FriendRequestActivity extends BaseActivity implements SwipeRefreshL
     }
 
     @Override
+    public void onBackPressed() {
+        MainActivity.launch(this);
+        finish();
+    }
+
+    @Override
     public void onRefresh() {
-        logic.loadRequestList();
+        loadData();
     }
 }

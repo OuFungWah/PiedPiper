@@ -25,9 +25,11 @@ public interface ConstValue {
     String HEADER_V_CONTENT_TYPE_JSON = "application/json";
 
     int LOGIN_INFO = 0;
+    int FRIEND_REQUEST = 1;
 
     String[] SP_NAMES = new String[]{
-        "LOGIN_INFO"
+        "LOGIN_INFO",
+        "FRIEND_REQUEST"
     };
 
 }

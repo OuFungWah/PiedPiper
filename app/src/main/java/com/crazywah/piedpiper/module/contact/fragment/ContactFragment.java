@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,8 @@ import com.crazywah.piedpiper.module.contact.logic.ContactLogic;
 import org.greenrobot.eventbus.EventBus;
 
 public class ContactFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
+
+    private static final String TAG = "ContactFragment";
 
     private RecyclerView contactListRv;
     private SwipeRefreshLayout refreshLayout;
@@ -41,7 +44,6 @@ public class ContactFragment extends BaseFragment implements SwipeRefreshLayout.
         switch (msg.what) {
             case ContactLogic.MSG_GET_FRIENDS_SUCC:
                 updateView();
-                EventBus.getDefault().post(new PiedEvent(PiedEvent.EventType.MSG_UPDATE_FRIEND_LIST));
                 break;
             case ContactLogic.MSG_GET_FRIENDS_FAIL:
                 refreshLayout.setRefreshing(false);
@@ -92,7 +94,13 @@ public class ContactFragment extends BaseFragment implements SwipeRefreshLayout.
     @Override
     public void onEvent(PiedEvent event) {
         switch (event.getType()) {
+            case MSG_RECEIVE_FRIEND_REQUEST:
+            case MSG_READ_FRIEND_REQUEST:
+                adapter.setList(logic.getObjects());
+                adapter.notifyDataSetChanged();
+                break;
             case MSG_UPDATE_FRIEND_LIST:
+                loadData();
                 break;
             default:
                 break;

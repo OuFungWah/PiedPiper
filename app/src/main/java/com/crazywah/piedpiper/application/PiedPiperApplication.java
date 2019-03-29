@@ -8,13 +8,19 @@ import android.content.IntentFilter;
 import com.crazywah.piedpiper.base.BaseReceiver;
 import com.crazywah.piedpiper.base.CustomMessageService;
 import com.crazywah.piedpiper.base.MessageService;
+import com.crazywah.piedpiper.common.ConstValue;
 import com.crazywah.piedpiper.common.PiedToast;
 import com.crazywah.piedpiper.common.RequestManager;
 import com.crazywah.piedpiper.bean.User;
+import com.crazywah.piedpiper.database.service.UserDBService;
+import com.crazywah.piedpiper.module.contact.common.ContactConstValue;
+import com.crazywah.piedpiper.module.login.LoginConst;
 import com.crazywah.piedpiper.util.NotificationUtil;
+import com.crazywah.piedpiper.util.SPUtil;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.NimIntent;
 import com.netease.nimlib.sdk.SDKOptions;
+import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 
 public class PiedPiperApplication extends Application {
@@ -73,6 +79,12 @@ public class PiedPiperApplication extends Application {
 
     public static Context getInstance() {
         return context;
+    }
+
+    public static void logout() {
+        NIMClient.getService(AuthService.class).logout();
+        SPUtil.clearAll();
+        UserDBService.newInstance().clearDB();
     }
 
 }

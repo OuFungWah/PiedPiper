@@ -53,7 +53,7 @@ public class SPUtil {
         return sp.getBoolean(k, false);
     }
 
-    public boolean contains(String k){
+    public boolean contains(String k) {
         return sp.contains(k);
     }
 
@@ -65,8 +65,11 @@ public class SPUtil {
         sp.edit().clear().apply();
     }
 
-    public void clearAll() {
+    public static void clearAll() {
         for (String name : ConstValue.SP_NAMES) {
+            if (name.equals(ConstValue.SP_NAMES[ConstValue.LOGIN_INFO])) {
+                continue;
+            }
             from(name).clear();
         }
     }

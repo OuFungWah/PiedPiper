@@ -2,6 +2,7 @@ package com.crazywah.piedpiper.widget;
 
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -95,12 +96,14 @@ public class NormalEntranceViewHolder extends RecyclerView.ViewHolder implements
         if (!TextUtils.isEmpty(entrance.getTitle())) {
             titleTv.setText(entrance.getTitle());
         }
+
         if (!TextUtils.isEmpty(entrance.getContent())) {
             contentTv.setText(entrance.getContent());
             contentTv.setVisibility(View.VISIBLE);
         } else {
             contentTv.setVisibility(View.GONE);
         }
+
         divider.setVisibility(showDivider ? View.VISIBLE : View.GONE);
         if (canClick) {
             entranceImg.setVisibility(View.VISIBLE);
@@ -113,6 +116,13 @@ public class NormalEntranceViewHolder extends RecyclerView.ViewHolder implements
         } else {
             entranceImg.setVisibility(View.GONE);
         }
+
+        if (entrance.getUnReadCount() > 0) {
+            unReadView.show(entrance.getUnReadCount() + "", Color.parseColor("#79CD59"), Color.WHITE, Color.parseColor("#E2F7D8"), DensityUtils.dp2px(11), DensityUtils.dp2px(11));
+        } else {
+            unReadView.setVisibility(View.GONE);
+        }
+
         itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
