@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/chatroom_item_date_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:gravity="center"
+        android:text="23:05:00"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:visibility="gone" />
+
+    <RelativeLayout
+        android:id="@+id/chatroom_item_left_rl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="6dp"
+        android:paddingTop="6dp"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/chatroom_item_left_avatar_img"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="3dp"
+            android:src="@drawable/ic_avatar_black" />
+
+        <TextView
+            android:id="@+id/chatroom_item_left_content_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="100dp"
+            android:layout_toRightOf="@+id/chatroom_item_left_avatar_img"
+            android:background="@drawable/chatroom_et_bg"
+            android:minHeight="36dp"
+            android:padding="10dp"
+            android:text="1"
+            android:textColor="@color/colorCommonText"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/chatroom_item_right_rl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="6dp"
+        android:paddingTop="6dp"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/chatroom_item_right_avatar_img"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="3dp"
+            android:src="@drawable/ic_avatar_black" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="100dp"
+            android:layout_marginRight="5dp"
+            android:layout_toLeftOf="@+id/chatroom_item_right_avatar_img"
+            android:gravity="right"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/chatroom_item_send_flag_img"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/ic_send_succ"
+                    android:visibility="gone" />
+
+                <ProgressBar
+                    android:id="@+id/chatroom_item_send_flag_pb"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="5dp"
+                    android:visibility="visible" />
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/chatroom_item_right_content_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/chatroom_right_bg"
+                android:minHeight="36dp"
+                android:padding="10dp"
+                android:text="111111"
+                android:textColor="@android:color/white"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>

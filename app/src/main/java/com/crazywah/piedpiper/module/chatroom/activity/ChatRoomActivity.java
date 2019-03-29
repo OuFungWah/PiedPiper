@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -15,9 +16,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.crazywah.piedpiper.R;
-import com.crazywah.piedpiper.application.PiedPiperApplication;
 import com.crazywah.piedpiper.base.BaseActivity;
 import com.crazywah.piedpiper.bean.User;
+import com.crazywah.piedpiper.common.PiedEvent;
+import com.crazywah.piedpiper.module.chatroom.ChatRoomMessageReadObserver;
+import com.crazywah.piedpiper.module.chatroom.ChatRoomMessageStatusObserver;
 import com.crazywah.piedpiper.module.chatroom.adapter.ChatRoomAdapter;
 import com.crazywah.piedpiper.module.chatroom.logic.ChatRoomLogic;
 import com.crazywah.piedpiper.common.PiedToast;
@@ -33,9 +36,11 @@ import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.List;
 
-public class ChatRoomActivity extends BaseActivity implements View.OnClickListener, Observer<List<IMMessage>> {
+public class ChatRoomActivity extends BaseActivity implements View.OnClickListener, Observer<List<IMMessage>>, SwipeRefreshLayout.OnRefreshListener {
 
     public static boolean isShowing = false;
 
@@ -47,6 +52,7 @@ public class ChatRoomActivity extends BaseActivity implements View.OnClickListen
     private TextView titleTv;
     private TextView subTitleTv;
 
+    private SwipeRefreshLayout refreshLayout;
     private RecyclerView chatListRv;
     private ChatRoomAdapter adapter;
     private EditText inputEt;
@@ -55,6 +61,8 @@ public class ChatRoomActivity extends BaseActivity implements View.OnClickListen
     private ChatRoomLogic logic;
     private String targetId;
     private Gson parser;
+    private ChatRoomMessageStatusObserver messageStatusObserver = new ChatRoomMessageStatusObserver();
+    private ChatRoomMessageReadObserver readObserver = new ChatRoomMessageReadObserver();
 
     public static void launch(Context context, String id) {
         Intent intent = new Intent(context, ChatRoomActivity.class);
@@ -68,19 +76,27 @@ public class ChatRoomActivity extends BaseActivity implements View.OnClickListen
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         NIMClient.getService(MsgServiceObserve.class).observeReceiveMessage(this, true);
+        NIMClient.getService(MsgServiceObserve.class).observeMsgStatus(messageStatusObserver, true);
+        NIMClient.getService(MsgServiceObserve.class).observeMessageReceipt(readObserver, true);
         parser = new Gson();
         handleParams();
         logic.getTargetInfo(targetId);
         MessageUtil.getService().clearUnreadCount(targetId, SessionTypeEnum.P2P);
-
         initView();
         setView();
+        loadData();
+    }
+
+    private void loadData() {
+        IMMessage message = MessageBuilder.createEmptyMessage(targetId, SessionTypeEnum.P2P, System.currentTimeMillis());
+        logic.loadMessage(message);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         isShowing = true;
+
     }
 
     @Override
@@ -101,16 +117,17 @@ public class ChatRoomActivity extends BaseActivity implements View.OnClickListen
         chatListRv = findViewById(R.id.chat_room_list);
         inputEt = findViewById(R.id.chat_room_et);
         sendBtn = findViewById(R.id.chat_room_send);
+        refreshLayout = findViewById(R.id.chat_room_refresh_view);
         adapter = new ChatRoomAdapter(logic.getMessageList());
     }
 
     private void setView() {
-        backImg.setOnClickListener(this);
-        sendBtn.setOnClickListener(this);
         chatListRv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true));
         chatListRv.setAdapter(adapter);
-        IMMessage message = MessageBuilder.createEmptyMessage(targetId, SessionTypeEnum.P2P, System.currentTimeMillis());
-        logic.loadMessage(message);
+        backImg.setOnClickListener(this);
+        sendBtn.setOnClickListener(this);
+        refreshLayout.setOnRefreshListener(this);
+        refreshLayout.setRefreshing(true);
     }
 
     @Override
@@ -129,15 +146,27 @@ public class ChatRoomActivity extends BaseActivity implements View.OnClickListen
                 break;
             case ChatRoomLogic.MSG_GET_USER_INFO_FAIL:
                 break;
-            case ChatRoomLogic.MSG_GET_HISTORY_SUCC:
+            case ChatRoomLogic.MSG_FIRST_LOAD_MESSAGE_SUCC:
                 adapter.notifyDataSetChanged();
                 chatListRv.smoothScrollToPosition(0);
                 break;
-            case ChatRoomLogic.MSG_GET_HISTORY_FAIL:
+            case ChatRoomLogic.MSG_FIRST_LOAD_MESSAGE_FAIL:
+                break;
+            case ChatRoomLogic.MSG_LOAD_MORE_MESSAGE_SUCC:
+                adapter.notifyDataSetChanged();
+                break;
+            case ChatRoomLogic.MSG_LOAD_MORE_MESSAGE_FAIL:
+                break;
+            case ChatRoomLogic.MSG_NEW_MESSAGE_SUCC:
+                adapter.notifyDataSetChanged();
+                chatListRv.smoothScrollToPosition(0);
+                break;
+            case ChatRoomLogic.MSG_NEW_MESSAGE_FAIL:
                 break;
             default:
                 break;
         }
+        refreshLayout.setRefreshing(false);
         return false;
     }
 
@@ -148,6 +177,8 @@ public class ChatRoomActivity extends BaseActivity implements View.OnClickListen
 
     @Override
     public void onBackPressed() {
+        MessageUtil.getService().clearUnreadCount(targetId, SessionTypeEnum.P2P);
+        MessageUtil.notifyUnReadChange(targetId);
         MainActivity.launch(this);
         finish();
     }
@@ -182,6 +213,28 @@ public class ChatRoomActivity extends BaseActivity implements View.OnClickListen
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+
+    }
+
+    @Override
+    public void onEvent(PiedEvent event) {
+        switch (event.getType()) {
+            case MSG_UPDATE_MESSAGE_STATUS:
+                if (adapter != null) {
+                    adapter.notifyMessageStatus((IMMessage) event.getParams());
+                }
+                break;
+            case MSG_UPDATE_MESSAGE_READ:
+                if (targetId.equals(event.getParams())) {
+                    adapter.notifyReadStatus();
+                }
+                break;
+        }
+    }
+
+    @Override
     public void onEvent(List<IMMessage> imMessages) {
         if (imMessages.get(0).getFromAccount().equals(targetId)) {
             logic.addToFirst(imMessages);
@@ -191,7 +244,18 @@ public class ChatRoomActivity extends BaseActivity implements View.OnClickListen
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        MessageUtil.getService().clearUnreadCount(targetId, SessionTypeEnum.P2P);
+//        PiedToast.showShort("destroy");
+        NIMClient.getService(MsgServiceObserve.class).observeMsgStatus(messageStatusObserver, false);
+        NIMClient.getService(MsgServiceObserve.class).observeMessageReceipt(readObserver, false);
         NIMClient.getService(MsgServiceObserve.class).observeReceiveMessage(this, false);
+    }
+
+    @Override
+    public void onRefresh() {
+        if (logic.getMessageList() != null && !logic.getMessageList().isEmpty()) {
+            logic.loadMessage(logic.getMessageList().get(logic.getMessageList().size() - 1));
+        } else {
+            refreshLayout.setRefreshing(false);
+        }
     }
 }

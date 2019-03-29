@@ -11,6 +11,9 @@ import com.crazywah.piedpiper.application.PiedPiperApplication;
 import com.crazywah.piedpiper.bean.User;
 import com.crazywah.piedpiper.module.chatroom.widget.ChatRoomLeftViewHolder;
 import com.crazywah.piedpiper.module.chatroom.widget.ChatRoomRightViewHolder;
+import com.crazywah.piedpiper.module.chatroom.widget.ChatRoomViewHolder;
+import com.crazywah.piedpiper.util.DateUtil;
+import com.netease.nimlib.sdk.msg.constant.MsgStatusEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 
 import java.util.List;
@@ -19,7 +22,7 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     private static final String TAG = "ChatRoomAdapter";
 
-    enum TYPE {
+    public enum TYPE {
         RIGHT,
         LEFT
     }
@@ -35,23 +38,12 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view;
-        if (viewType == TYPE.RIGHT.ordinal()) {
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_item_chatroom_right, parent, false);
-            return new ChatRoomRightViewHolder(view);
-        } else {
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_item_chatroom_left, parent, false);
-            return new ChatRoomLeftViewHolder(view);
-        }
+        return new ChatRoomViewHolder(parent);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        if(holder instanceof ChatRoomRightViewHolder){
-            ((ChatRoomRightViewHolder)holder).setView(messageList.get(position));
-        }else if(holder instanceof ChatRoomLeftViewHolder){
-            ((ChatRoomLeftViewHolder)holder).setView(messageList.get(position),user);
-        }
+        ((ChatRoomViewHolder) holder).setView(messageList.get(position), user, isDifferentFromLast(position));
     }
 
     @Override
@@ -59,12 +51,13 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         return position;
     }
 
-    @Override
-    public int getItemViewType(int position) {
-        if (messageList.get(position).getFromAccount().equals(PiedPiperApplication.getLoginUser().getAccountId())) {
-            return TYPE.RIGHT.ordinal();
+    private static final long TIME_GAP = 3 * DateUtil.MIN_LONG;
+
+    private boolean isDifferentFromLast(int position) {
+        if (position + 1 < getItemCount()) {
+            return Math.abs(messageList.get(position).getTime() - messageList.get(position + 1).getTime()) >= TIME_GAP;
         } else {
-            return TYPE.LEFT.ordinal();
+            return true;
         }
     }
 
@@ -87,5 +80,26 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public int getItemCount() {
         return messageList.size();
+    }
+
+    public void notifyMessageStatus(IMMessage message) {
+        if (messageList != null && !messageList.isEmpty()) {
+            for (IMMessage item : messageList) {
+                if (item.getUuid().equals(message.getUuid())) {
+                    item.setStatus(message.getStatus());
+                    notifyItemChanged(messageList.indexOf(item), "");
+                }
+            }
+        }
+    }
+
+    public void notifyReadStatus() {
+        if (messageList != null && !messageList.isEmpty()) {
+            for (IMMessage item : messageList) {
+                if (item.getFromAccount().equals(PiedPiperApplication.getLoginUser().getAccountId())) {
+                    notifyItemChanged(messageList.indexOf(item), "");
+                }
+            }
+        }
     }
 }

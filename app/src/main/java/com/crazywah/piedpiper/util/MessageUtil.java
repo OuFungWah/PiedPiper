@@ -4,6 +4,7 @@ import android.support.annotation.Nullable;
 
 import com.crazywah.piedpiper.application.PiedPiperApplication;
 import com.crazywah.piedpiper.bean.User;
+import com.crazywah.piedpiper.common.PiedEvent;
 import com.google.gson.Gson;
 import com.netease.nimlib.sdk.InvocationFuture;
 import com.netease.nimlib.sdk.NIMClient;
@@ -15,6 +16,8 @@ import com.netease.nimlib.sdk.msg.attachment.MsgAttachment;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.msg.model.RecentContact;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -48,12 +51,18 @@ public class MessageUtil {
         return getService().getTotalUnreadCount();
     }
 
-    public static void getUnRead() {
-
+    public static void notifyUnReadChange(String id) {
+        PiedEvent event = new PiedEvent(PiedEvent.EventType.MSG_UPDATE_UNREAD_COUNT);
+        event.setParams(id);
+        EventBus.getDefault().post(event);
     }
 
     public static MsgService getService() {
         return NIMClient.getService(MsgService.class);
+    }
+
+    public static void sendRemoteRead(IMMessage message) {
+        NIMClient.getService(MsgService.class).sendMessageReceipt(message.getSessionId(), message);
     }
 
 }

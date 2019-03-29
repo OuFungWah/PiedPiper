@@ -7,7 +7,10 @@ public class PiedEvent {
         MSG_AFTER_SELECT_DATE,
         MSG_RECEIVE_FRIEND_REQUEST,
         MSG_RECEIVE_FRIEND_HANDLE_REQUEST,
-        MSG_UPDATE_FRIEND_LIST
+        MSG_UPDATE_FRIEND_LIST,
+        MSG_UPDATE_MESSAGE_STATUS,
+        MSG_UPDATE_MESSAGE_READ,
+        MSG_UPDATE_UNREAD_COUNT
     }
 
     private EventType type;

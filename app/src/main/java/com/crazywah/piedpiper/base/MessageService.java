@@ -56,7 +56,7 @@ public class MessageService extends Service implements Observer<List<IMMessage>>
         if (!ChatRoomActivity.isShowing){
             // 处理新收到的消息，为了上传处理方便，SDK 保证参数 messages 全部来自同一个聊天对象。
             for (IMMessage message : imMessages) {
-                PiedToast.showShort("MessageService 收到信息 来自 " + message.getFromNick());
+                Log.d(TAG, "onEvent: MessageService 收到信息 来自 " + message.getFromNick());
                 NotificationUtil.showNotification(message);
                 MessageUtil.getService().pullMessageHistory(message, 50, true).setCallback(new RequestCallback<List<IMMessage>>() {
                     @Override

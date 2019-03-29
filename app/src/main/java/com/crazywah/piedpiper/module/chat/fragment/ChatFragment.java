@@ -101,9 +101,10 @@ public class ChatFragment extends BaseFragment implements Observer<List<RecentCo
     public void onEvent(PiedEvent event) {
         switch (event.getType()) {
             case MSG_UPDATE_FRIEND_LIST:
-//                PiedToast.showShort("收到更新好友通知");
-                Log.d(TAG, "onEvent: 收到更新好友通知");
                 updateView();
+                break;
+            case MSG_UPDATE_UNREAD_COUNT:
+                logic.loadRecentContacts();
                 break;
             default:
                 break;

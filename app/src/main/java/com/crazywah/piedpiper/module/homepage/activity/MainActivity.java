@@ -250,7 +250,14 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
      */
     @Override
     public void onEvent(PiedEvent event) {
-        updateView();
+        switch (event.getType()){
+            case MSG_NOTIFY_REGISTRANT_UPDATE:
+                updateView();
+                break;
+            case MSG_UPDATE_UNREAD_COUNT:
+                updateUnRead();
+                break;
+        }
     }
 
     @Override

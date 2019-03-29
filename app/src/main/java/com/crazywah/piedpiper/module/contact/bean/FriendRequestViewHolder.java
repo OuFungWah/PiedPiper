@@ -55,7 +55,7 @@ public class FriendRequestViewHolder extends RecyclerView.ViewHolder implements 
 
     public void setView(final User user, boolean isSame) {
         this.user = user;
-        ImageLoader.loadCircle(user.getAvatar(), avatarImg);
+        ImageLoader.loadUserAvatar(user, avatarImg);
         nameTv.setText(user.getName());
         switch (user.getRequestStatus()) {
             case FriendRequest.REFUSED:
