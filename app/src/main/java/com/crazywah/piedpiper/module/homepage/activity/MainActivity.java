@@ -19,6 +19,7 @@ import com.crazywah.piedpiper.common.PiedToast;
 import com.crazywah.piedpiper.common.RequestManager;
 import com.crazywah.piedpiper.database.service.UserDBService;
 import com.crazywah.piedpiper.module.contact.util.RequestCountUtil;
+import com.crazywah.piedpiper.module.discovery.activity.PostMomentActivity;
 import com.crazywah.piedpiper.module.homepage.MainLogic;
 import com.crazywah.piedpiper.module.homepage.adapter.HomePagerAdapter;
 import com.crazywah.piedpiper.module.user.activity.UserInfoActivity;
@@ -54,14 +55,11 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     private MainBottomView bottomView;
     private ViewPager mainViewPager;
     private HomePagerAdapter homePagerAdapter;
-    private PhotoDialog photoDialog;
     private int currPageIndex = 0;
     private MainLogic logic;
 
     private UserDBService userService;
     private Gson parser = new Gson();
-
-    private PhotoDenpendence photoDenpendence;
 
     public static void launch(Context context) {
         context.startActivity(new Intent(context, MainActivity.class));
@@ -72,31 +70,9 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         super.onCreate(savedInstanceState);
         userService = UserDBService.newInstance();
         NIMClient.getService(MsgServiceObserve.class).observeRecentContact(this, true);
-        photoDenpendence = new PhotoDenpendence(this, handler);
-        photoDenpendence.setCallBack(new PhotoDenpendence.BitmapCallBack() {
-            @Override
-            public void afterGetBitmap(Uri uri, Bitmap bitmap) {
-                titleBarView.setOneImg(bitmap);
-                String base64 = BitmapUtil.bitmapToBase64(bitmap);
-                RequestManager.getInstance().uploadPic(base64, new PiedCallback() {
-                    @Override
-                    public void onSuccess(Object object) {
-                        PiedToast.showShort("上传失败");
-                    }
-
-                    @Override
-                    public boolean onFail(String message) {
-                        return false;
-                    }
-                });
-                photoDialog.dismiss();
-            }
-        });
-        addDependence(photoDenpendence);
         initView();
         setView();
         load();
-        photoDialog.setDependence(photoDenpendence);
     }
 
     private void load() {
@@ -108,7 +84,6 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         titleBarView = findViewById(R.id.main_titlebar);
         mainViewPager = findViewById(R.id.main_pager);
         bottomView = findViewById(R.id.main_bottom_view);
-        photoDialog = new PhotoDialog(this, R.style.PickPhotoDialog);
     }
 
     private void setView() {
@@ -202,7 +177,6 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        removeDependence(photoDenpendence);
         NIMClient.getService(MsgServiceObserve.class).observeRecentContact(this, false);
     }
 
@@ -283,7 +257,8 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
             case TitleBarView.CLICK_TITLE:
                 break;
             case TitleBarView.CLICK_ONE:
-                photoDialog.show();
+//                photoDialog.show();
+                PostMomentActivity.launch(this);
                 break;
             case TitleBarView.CLICK_TWO:
                 SearchActivity.launch(this);
