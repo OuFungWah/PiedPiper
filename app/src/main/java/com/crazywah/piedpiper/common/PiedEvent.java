@@ -11,7 +11,14 @@ public class PiedEvent {
         MSG_UPDATE_FRIEND_LIST,
         MSG_UPDATE_MESSAGE_STATUS,
         MSG_UPDATE_MESSAGE_READ,
-        MSG_UPDATE_UNREAD_COUNT
+        MSG_UPDATE_UNREAD_COUNT,
+        MSG_REQUEST_PHOTO,
+        MSG_REMOVE_POSTING_PHOTO,
+        //朋友圈相关
+        MSG_POST_MOMENT_SUCC,
+        MSG_PROGRESSING_DELETE,
+        MSG_DELETE_MOMENT_SUCC,
+        MSG_DELETE_MOMENT_FAIL
     }
 
     private EventType type;
