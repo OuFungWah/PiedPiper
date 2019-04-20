@@ -6,7 +6,7 @@ public class RequestUrl {
 
     //    public static final String HOST = "http://121.42.205.69:9527";
     public static final String HOST = "http://www.crazywah.com:9527";
-    public static final String DEV_HOST = "http://192.168.0.104:9527";
+    public static final String DEV_HOST = "http://192.168.199.117:9527";
 
     public static final String URL_LOGIN = (DEV ? DEV_HOST : HOST) + "/account/login";
     public static final String URL_REGISTER = (DEV ? DEV_HOST : HOST) + "/account/register";
@@ -32,8 +32,12 @@ public class RequestUrl {
     public static final String URL_HANDLE_REQUEST = (DEV ? DEV_HOST : HOST) + "/friend/handleRequest";
     public static final String URL_POST_MOMENT = (DEV ? DEV_HOST : HOST) + "/moment/postMoment";
     public static final String URL_GET_MOMENTS = (DEV ? DEV_HOST : HOST) + "/moment/getMomentsByToken";
+    public static final String URL_GET_ALL_MOMENTS = (DEV ? DEV_HOST : HOST) + "/moment/getAllMoments";
     public static final String URL_DELETE_MOMENT = (DEV ? DEV_HOST : HOST) + "/moment/deleteMoment";
     public static final String URL_ADD_COMMENT = (DEV ? DEV_HOST : HOST) + "/moment/addComment";
     public static final String URL_GET_COMMENTS = (DEV ? DEV_HOST : HOST) + "/moment/getCommentByMomentId";
+    public static final String URL_DELETE_COMMENTS = (DEV ? DEV_HOST : HOST) + "/moment/deleteComment";
+    public static final String URL_LIKE_MOMENT = (DEV ? DEV_HOST : HOST) + "/moment/likeMoment";
+    public static final String URL_DISLIKE_MOMENT = (DEV ? DEV_HOST : HOST) + "/moment/dislikeMoment";
 
 }
