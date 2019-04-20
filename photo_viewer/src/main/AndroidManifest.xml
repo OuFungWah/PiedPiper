@@ -1,0 +1,7 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.crazywah.photo_viewer">
+
+    <application>
+        <activity android:name=".PhotoViewerActivity" android:theme="@style/TransientActivityStyle" />
+    </application>
+</manifest>
