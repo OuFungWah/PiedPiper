@@ -84,6 +84,7 @@
         <activity android:name=".module.user.activity.UserInfoActivity" />
         <activity android:name=".module.user.activity.ModifyInfoActivity" />
         <activity android:name=".module.homepage.activity.SearchActivity" />
+        <activity android:name=".module.discovery.activity.PostMomentActivity" />
 
         <!-- APP key, 可以在这里设置，也可以在 SDKOptions 中提供。
            如果 SDKOptions 中提供了，取 SDKOptions 中的值。 -->

@@ -1,5 +1,6 @@
 package com.crazywah.piedpiper.util;
 
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
@@ -18,6 +19,14 @@ public class ImageLoader {
         if (!TextUtils.isEmpty(url)) {
             Uri uri = Uri.parse(url);
             Glide.with(imageView.getContext()).load(uri).into(imageView);
+        }
+    }
+
+    public static void loadCompress(int quality, String url, ImageView imageView) {
+        if (!TextUtils.isEmpty(url)) {
+            Uri uri = Uri.parse(url);
+            RequestOptions mRequestOptions = RequestOptions.encodeQualityOf(quality);
+            Glide.with(imageView.getContext()).load(uri).apply(mRequestOptions).into(imageView);
         }
     }
 

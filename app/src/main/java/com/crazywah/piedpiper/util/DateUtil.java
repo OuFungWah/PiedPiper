@@ -9,6 +9,7 @@ public class DateUtil {
     static SimpleDateFormat yyyyMMdd = new SimpleDateFormat("yyyy年MM月dd日");
     static SimpleDateFormat mmdd = new SimpleDateFormat("MM月dd日");
     static SimpleDateFormat hhmmss = new SimpleDateFormat("HH:mm:ss");
+    static SimpleDateFormat yyyMMddhhmmss = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
 
     public static final int BIGGER = 1;
     public static final int EQUALS = 0;
@@ -126,6 +127,10 @@ public class DateUtil {
 
     public static String formatHMS(Date date) {
         return hhmmss.format(date);
+    }
+
+    public static String formatYMDHMS(Date date) {
+        return yyyMMddhhmmss.format(date);
     }
 
 }

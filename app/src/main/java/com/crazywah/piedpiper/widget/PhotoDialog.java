@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,9 +55,13 @@ public class PhotoDialog extends Dialog implements View.OnClickListener {
         cancelRl.setOnClickListener(this);
     }
 
-    public void hideTakeAndSelect(){
+    public void hideTakeAndSelect() {
         takePhotoRl.setVisibility(View.GONE);
         selectPhotoRl.setVisibility(View.GONE);
+    }
+
+    public void hideCheckImg(){
+        checkPhotoRl.setVisibility(View.GONE);
     }
 
     @Override
@@ -71,6 +74,9 @@ public class PhotoDialog extends Dialog implements View.OnClickListener {
                 dependence.commitSelectPictureRequest();
                 break;
             case R.id.dialog_photo_check_rl:
+                if (dependence.getCallBack() != null) {
+                    dependence.getCallBack().checkBitmap();
+                }
                 break;
             case R.id.dialog_photo_cancel_rl:
                 dismiss();

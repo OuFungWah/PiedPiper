@@ -17,5 +17,6 @@
     <color name="colorBlack">#000000</color>
     <color name="colorGrey">#878E98</color>
     <color name="colorTransparent">#00000000</color>
+    <color name="colorLikedRed">#CC3A5F</color>
 
 </resources>

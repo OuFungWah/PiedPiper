@@ -183,6 +183,7 @@ public class PhotoDenpendence implements BaseResultDependence {
 
     public interface BitmapCallBack {
         void afterGetBitmap(Uri uri, Bitmap bitmap);
+        void checkBitmap();
     }
 
 }

@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.crazywah.photo_viewer.PhotoViewerActivity;
 import com.crazywah.piedpiper.R;
 import com.crazywah.piedpiper.application.PiedPiperApplication;
 import com.crazywah.piedpiper.base.BaseActivity;
@@ -112,6 +113,16 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                 String base64 = BitmapUtil.bitmapToBase64(bitmap);
                 logic.uploadAvatar(base64);
                 photoDialog.dismiss();
+            }
+
+            @Override
+            public void checkBitmap() {
+                String url = isMe ? PiedPiperApplication.getLoginUser().getAvatar() : logic.getUser().getAvatar();
+                if (!TextUtils.isEmpty(url)) {
+                    PhotoViewerActivity.launch(url, PiedPiperApplication.getInstance());
+                } else {
+                    PhotoViewerActivity.launch(avatarImg.getDrawingCache(), PiedPiperApplication.getInstance());
+                }
             }
         });
         addDependence(photoDenpendence);

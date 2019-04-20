@@ -12,7 +12,7 @@ public class UpdateEmailRequest extends RequestBase<Void> {
     private String value;
 
     public UpdateEmailRequest(String value, Response.Listener<Void> listener, Response.ErrorListener errorListener) {
-        super(RequestUrl.URL_UPDATE_ADDRESS, listener, errorListener);
+        super(RequestUrl.URL_UPDATE_EMAIL, listener, errorListener);
         this.value = value;
     }
 
