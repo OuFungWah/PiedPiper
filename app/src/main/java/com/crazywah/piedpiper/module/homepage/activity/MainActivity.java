@@ -89,6 +89,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     private void setView() {
         homePagerAdapter = new HomePagerAdapter(getSupportFragmentManager());
         mainViewPager.setAdapter(homePagerAdapter);
+        mainViewPager.setOffscreenPageLimit(3);
         mainViewPager.addOnPageChangeListener(this);
         titleBarView.setTitle(TITLES[currPageIndex]);
         titleBarView.setTwoImg(R.drawable.ic_person_add_black);
