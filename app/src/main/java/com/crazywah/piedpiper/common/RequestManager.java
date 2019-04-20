@@ -7,12 +7,16 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
+import com.crazywah.piedpiper.bean.Moment;
 import com.crazywah.piedpiper.bean.User;
 import com.crazywah.piedpiper.module.chatroom.request.GetUsersByRelationRequest;
 import com.crazywah.piedpiper.module.chatroom.request.PicUpLoadRequest;
 import com.crazywah.piedpiper.module.chatroom.request.UserInfoRequest;
 import com.crazywah.piedpiper.module.contact.request.FriendListRequest;
 import com.crazywah.piedpiper.module.contact.request.HandleFriendRequest;
+import com.crazywah.piedpiper.module.discovery.request.DeleteMomentRequest;
+import com.crazywah.piedpiper.module.discovery.request.GetMomentRequest;
+import com.crazywah.piedpiper.module.discovery.request.PostMomentRequest;
 import com.crazywah.piedpiper.module.homepage.request.GetAllInfoRequest;
 import com.crazywah.piedpiper.module.homepage.request.GetStrangersRequest;
 import com.crazywah.piedpiper.module.login.request.LoginRequest;
@@ -314,11 +318,56 @@ public class RequestManager {
         addRequest(request);
     }
 
+    public void getAllMoments(int limit, int offset, final PiedCallback<List<Moment>> callback) {
+        GetMomentRequest request = new GetMomentRequest(limit, offset, new Response.Listener<List<Moment>>() {
+            @Override
+            public void onResponse(List<Moment> response) {
+                callback.onSuccess(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                callback.onFail(error.getMessage());
+            }
+        });
+        addRequest(request);
+    }
+
     public void searchStrangers(String id, final PiedCallback<List<User>> callback) {
         GetStrangersRequest request = new GetStrangersRequest(id, new Response.Listener<List<User>>() {
             @Override
             public void onResponse(List<User> response) {
                 callback.onSuccess(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                callback.onFail(error.getMessage());
+            }
+        });
+        addRequest(request);
+    }
+
+    public void postMoment(String postContent, int visiableRange, String photoList, final PiedCallback<Void> callback) {
+        PostMomentRequest request = new PostMomentRequest(postContent, visiableRange, photoList, new Response.Listener<Void>() {
+            @Override
+            public void onResponse(Void response) {
+                callback.onSuccess(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                callback.onFail(error.getMessage());
+            }
+        });
+        addRequest(request);
+    }
+
+    public void deleteMoment(final int momentId, final PiedCallback<Integer> callback) {
+        DeleteMomentRequest request = new DeleteMomentRequest(momentId, new Response.Listener<Integer>() {
+            @Override
+            public void onResponse(Integer response) {
+                callback.onSuccess(momentId);
             }
         }, new Response.ErrorListener() {
             @Override
