@@ -32,6 +32,7 @@ public class RequestUrl {
     public static final String URL_HANDLE_REQUEST = (DEV ? DEV_HOST : HOST) + "/friend/handleRequest";
     public static final String URL_POST_MOMENT = (DEV ? DEV_HOST : HOST) + "/moment/postMoment";
     public static final String URL_GET_MOMENTS = (DEV ? DEV_HOST : HOST) + "/moment/getMomentsByToken";
+    public static final String URL_GET_MOMENT_DETAIL = (DEV ? DEV_HOST : HOST) + "/moment/getMomentDetail";
     public static final String URL_GET_ALL_MOMENTS = (DEV ? DEV_HOST : HOST) + "/moment/getAllMoments";
     public static final String URL_DELETE_MOMENT = (DEV ? DEV_HOST : HOST) + "/moment/deleteMoment";
     public static final String URL_ADD_COMMENT = (DEV ? DEV_HOST : HOST) + "/moment/addComment";

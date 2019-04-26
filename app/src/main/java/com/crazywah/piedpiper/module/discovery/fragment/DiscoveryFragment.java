@@ -1,5 +1,6 @@
 package com.crazywah.piedpiper.module.discovery.fragment;
 
+import android.arch.lifecycle.Lifecycle;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.annotation.NonNull;
@@ -15,9 +16,12 @@ import android.view.ViewGroup;
 
 import com.crazywah.piedpiper.R;
 import com.crazywah.piedpiper.base.BaseFragment;
+import com.crazywah.piedpiper.bean.Moment;
 import com.crazywah.piedpiper.common.PiedEvent;
 import com.crazywah.piedpiper.common.PiedToast;
+import com.crazywah.piedpiper.module.discovery.activity.MomentDetailActivity;
 import com.crazywah.piedpiper.module.discovery.adapter.DiscoveryMomentAdapter;
+import com.crazywah.piedpiper.module.discovery.bean.MomentDetail;
 import com.crazywah.piedpiper.module.discovery.widget.FooterViewHolder.STATE;
 import com.crazywah.piedpiper.module.discovery.logic.DiscoveryLogic;
 import com.crazywah.piedpiper.module.discovery.widget.DeleteDialog;
@@ -78,6 +82,12 @@ public class DiscoveryFragment extends BaseFragment implements View.OnClickListe
                 break;
             case DiscoveryLogic.MSG_DELETE_MOMENT:
                 adapter.notifyDataSetChanged();
+                break;
+            case DiscoveryLogic.MSG_MODIFY_LIKE_STATE:
+                adapter.notifyItemChanged(msg.arg1, "");
+                break;
+            case DiscoveryLogic.MSG_MODIFY_COMMENT_STATE:
+                adapter.notifyItemChanged(msg.arg1, "");
                 break;
         }
         return false;
@@ -180,6 +190,33 @@ public class DiscoveryFragment extends BaseFragment implements View.OnClickListe
                 break;
             case MSG_PROGRESSING_DELETE:
                 progressingView.setVisibility(View.VISIBLE);
+                break;
+            case MSG_CLICK_COMMENT:
+                if (this.getLifecycle().getCurrentState() == Lifecycle.State.RESUMED && event.getParams() instanceof Moment) {
+                    MomentDetailActivity.launch(getContext(), ((Moment) event.getParams()).getMomentId());
+                }
+                break;
+            case MSG_CLICK_LIKE:
+                if (this.getLifecycle().getCurrentState() == Lifecycle.State.RESUMED && event.getParams() instanceof Moment) {
+
+                }
+                break;
+            case MSG_LIKE_SUCC:
+                if (event.getParams() instanceof Moment) {
+                    logic.likeMoment(((Moment) event.getParams()).getMomentId(), true);
+                }
+                break;
+            case MSG_DISLIKE_SUCC:
+                if (event.getParams() instanceof Moment) {
+                    logic.likeMoment(((Moment) event.getParams()).getMomentId(), false);
+                }
+                break;
+            case MSG_COMMENT_SUCC:
+                if (event.getParams() instanceof Moment) {
+                    logic.commentMoment(((Moment) event.getParams()).getMomentId(), true);
+                }
+                break;
+            case MSG_DELETE_COMMENT_SUCC:
                 break;
         }
     }

@@ -7,6 +7,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
+import com.crazywah.piedpiper.bean.Comment;
 import com.crazywah.piedpiper.bean.Moment;
 import com.crazywah.piedpiper.bean.User;
 import com.crazywah.piedpiper.module.chatroom.request.GetUsersByRelationRequest;
@@ -14,8 +15,13 @@ import com.crazywah.piedpiper.module.chatroom.request.PicUpLoadRequest;
 import com.crazywah.piedpiper.module.chatroom.request.UserInfoRequest;
 import com.crazywah.piedpiper.module.contact.request.FriendListRequest;
 import com.crazywah.piedpiper.module.contact.request.HandleFriendRequest;
+import com.crazywah.piedpiper.module.discovery.bean.MomentDetail;
+import com.crazywah.piedpiper.module.discovery.request.AddCommentRequest;
 import com.crazywah.piedpiper.module.discovery.request.DeleteMomentRequest;
+import com.crazywah.piedpiper.module.discovery.request.DislikeRequest;
+import com.crazywah.piedpiper.module.discovery.request.GetMomentDetailRequest;
 import com.crazywah.piedpiper.module.discovery.request.GetMomentRequest;
+import com.crazywah.piedpiper.module.discovery.request.LikeRequest;
 import com.crazywah.piedpiper.module.discovery.request.PostMomentRequest;
 import com.crazywah.piedpiper.module.homepage.request.GetAllInfoRequest;
 import com.crazywah.piedpiper.module.homepage.request.GetStrangersRequest;
@@ -368,6 +374,66 @@ public class RequestManager {
             @Override
             public void onResponse(Integer response) {
                 callback.onSuccess(momentId);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                callback.onFail(error.getMessage());
+            }
+        });
+        addRequest(request);
+    }
+
+    public void getMomentDetail(final int momentId, final PiedCallback<MomentDetail> callback) {
+        GetMomentDetailRequest request = new GetMomentDetailRequest(momentId, new Response.Listener<MomentDetail>() {
+            @Override
+            public void onResponse(MomentDetail response) {
+                callback.onSuccess(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                callback.onFail(error.getMessage());
+            }
+        });
+        addRequest(request);
+    }
+
+    public void addComment(int momentId, String toId, String content, final PiedCallback<Comment> callback) {
+        AddCommentRequest request = new AddCommentRequest(momentId, toId, content, new Response.Listener<Comment>() {
+            @Override
+            public void onResponse(Comment response) {
+                callback.onSuccess(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                callback.onFail(error.getMessage());
+            }
+        });
+        addRequest(request);
+    }
+
+    public void likeMoment(int momentId, final PiedCallback<Void> callback) {
+        LikeRequest request = new LikeRequest(momentId, new Response.Listener<Void>() {
+            @Override
+            public void onResponse(Void response) {
+                callback.onSuccess(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                callback.onFail(error.getMessage());
+            }
+        });
+        addRequest(request);
+    }
+
+    public void dislikeMoment(int momentId, final PiedCallback<Void> callback) {
+        DislikeRequest request = new DislikeRequest(momentId, new Response.Listener<Void>() {
+            @Override
+            public void onResponse(Void response) {
+                callback.onSuccess(response);
             }
         }, new Response.ErrorListener() {
             @Override

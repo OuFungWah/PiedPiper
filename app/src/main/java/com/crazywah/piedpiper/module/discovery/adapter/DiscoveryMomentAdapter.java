@@ -71,4 +71,6 @@ public class DiscoveryMomentAdapter extends RecyclerView.Adapter {
         this.state = state;
         notifyItemChanged(getItemCount() - 1, "");
     }
+
+
 }

@@ -23,6 +23,8 @@ public class DiscoveryLogic extends BaseLogic {
     public static final int MSG_LOAD_FAIL = 1;
     public static final int MSG_LOAD_NO_MORE = 2;
     public static final int MSG_DELETE_MOMENT = 3;
+    public static final int MSG_MODIFY_LIKE_STATE = 4;
+    public static final int MSG_MODIFY_COMMENT_STATE = 5;
 
     private static final int PAGE_SIZE = 10;
     private int curPage = 0;
@@ -101,6 +103,25 @@ public class DiscoveryLogic extends BaseLogic {
         if (moments.get(targetIndex).getMomentId() == momentId) {
             moments.remove(targetIndex);
             notifyUi(MSG_DELETE_MOMENT);
+        }
+    }
+
+    public void likeMoment(int momentId, boolean isLike) {
+        int position = searchIndex(momentId, 0, moments.size() - 1);
+        if (moments.get(position).getMomentId() == momentId) {
+            Moment moment = moments.get(position);
+            moment.setIsLiked(isLike ? 1 : 0);
+            moment.setLikeCount(moment.getLikeCount() + (isLike ? +1 : -1));
+            notifyUi(MSG_MODIFY_LIKE_STATE, position);
+        }
+    }
+
+    public void commentMoment(int momentId, boolean isAdd){
+        int position = searchIndex(momentId, 0, moments.size() - 1);
+        if (moments.get(position).getMomentId() == momentId) {
+            Moment moment = moments.get(position);
+            moment.setCommentCount(moment.getCommentCount() + (isAdd ? +1 : -1));
+            notifyUi(MSG_MODIFY_COMMENT_STATE, position);
         }
     }
 

@@ -1,22 +1,30 @@
 package com.crazywah.piedpiper.bean;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 /**
  * create table moment(
- *   moment_id int auto_increment unique ,
- *   account_id varchar(64),
- *   post_time datetime,
- *   post_content text,
- *   visiable_range int, #0:All, 1:whitelist, 2:blacklist, 3:private
- *   black_list text,
- *   white_list text,
- *   primary key(account_id, post_time)
+ * moment_id int auto_increment unique ,
+ * account_id varchar(64),
+ * post_time datetime,
+ * post_content text,
+ * visiable_range int, #0:All, 1:whitelist, 2:blacklist, 3:private
+ * black_list text,
+ * white_list text,
+ * primary key(account_id, post_time)
  * )
  */
 public class Moment {
 
+    public static Gson parser = new Gson();
+
+    private int isLiked;
     private String avatar;
     private String nickname;
     private int momentId;
@@ -30,6 +38,14 @@ public class Moment {
     private List<String> picUrls;
     private int likeCount;
     private int commentCount;
+
+    public int getIsLiked() {
+        return isLiked;
+    }
+
+    public void setIsLiked(int isLiked) {
+        this.isLiked = isLiked;
+    }
 
     public String getAvatar() {
         return avatar;
@@ -134,4 +150,11 @@ public class Moment {
     public void setCommentCount(int commentCount) {
         this.commentCount = commentCount;
     }
+
+    public static void convertPicUrl(Moment moment) {
+        Type urlsType = new TypeToken<ArrayList<String>>() {
+        }.getType();
+        moment.setPicUrls((List<String>) parser.fromJson(moment.getPhotoList(), urlsType));
+    }
+
 }

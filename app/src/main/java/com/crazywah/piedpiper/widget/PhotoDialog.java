@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 
 import com.crazywah.piedpiper.R;
 import com.crazywah.piedpiper.util.DensityUtils;
-import com.crazywah.piedpiper.util.PhotoDenpendence;
+import com.crazywah.piedpiper.denpendence.PhotoDenpendence;
 
 public class PhotoDialog extends Dialog implements View.OnClickListener {
 

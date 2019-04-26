@@ -18,7 +18,13 @@ public class PiedEvent {
         MSG_POST_MOMENT_SUCC,
         MSG_PROGRESSING_DELETE,
         MSG_DELETE_MOMENT_SUCC,
-        MSG_DELETE_MOMENT_FAIL
+        MSG_DELETE_MOMENT_FAIL,
+        MSG_CLICK_COMMENT,
+        MSG_CLICK_LIKE,
+        MSG_COMMENT_SUCC,
+        MSG_DELETE_COMMENT_SUCC,
+        MSG_LIKE_SUCC,
+        MSG_DISLIKE_SUCC
     }
 
     private EventType type;

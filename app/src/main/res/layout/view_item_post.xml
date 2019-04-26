@@ -135,6 +135,7 @@
                     android:orientation="horizontal">
 
                     <ImageView
+                        android:id="@+id/item_post_like_icon_img"
                         android:layout_width="18dp"
                         android:layout_height="18dp"
                         android:scaleType="fitXY"

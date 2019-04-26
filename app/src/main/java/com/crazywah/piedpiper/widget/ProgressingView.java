@@ -43,6 +43,14 @@ public class ProgressingView extends RelativeLayout implements View.OnClickListe
         setOnClickListener(this);
     }
 
+    public void show() {
+        this.setVisibility(VISIBLE);
+    }
+
+    public void dismiss() {
+        this.setVisibility(GONE);
+    }
+
     @Override
     public void onClick(View v) {
 

@@ -1,6 +1,5 @@
 package com.crazywah.piedpiper.module.user.activity;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -26,17 +25,15 @@ import com.crazywah.piedpiper.bean.CustomMessageType;
 import com.crazywah.piedpiper.bean.CustomNotificationBean;
 import com.crazywah.piedpiper.bean.RELATIONSHIP;
 import com.crazywah.piedpiper.bean.User;
-import com.crazywah.piedpiper.common.PiedCallback;
 import com.crazywah.piedpiper.common.PiedEvent;
 import com.crazywah.piedpiper.common.PiedToast;
-import com.crazywah.piedpiper.common.RequestManager;
 import com.crazywah.piedpiper.database.service.UserDBService;
 import com.crazywah.piedpiper.module.chatroom.activity.ChatRoomActivity;
 import com.crazywah.piedpiper.module.user.adapter.UserInfoEntranceAdapter;
 import com.crazywah.piedpiper.module.user.logic.UserInfoLogic;
 import com.crazywah.piedpiper.util.BitmapUtil;
 import com.crazywah.piedpiper.util.ImageLoader;
-import com.crazywah.piedpiper.util.PhotoDenpendence;
+import com.crazywah.piedpiper.denpendence.PhotoDenpendence;
 import com.crazywah.piedpiper.widget.NormalDialog;
 import com.crazywah.piedpiper.widget.PhotoDialog;
 import com.google.gson.Gson;

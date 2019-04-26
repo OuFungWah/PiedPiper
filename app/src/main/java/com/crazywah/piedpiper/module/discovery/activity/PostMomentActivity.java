@@ -25,7 +25,7 @@ import com.crazywah.piedpiper.common.PiedToast;
 import com.crazywah.piedpiper.module.discovery.adapter.ImageListAdapter;
 import com.crazywah.piedpiper.module.discovery.logic.PostMomentLogic;
 import com.crazywah.piedpiper.util.ImageLoader;
-import com.crazywah.piedpiper.util.PhotoDenpendence;
+import com.crazywah.piedpiper.denpendence.PhotoDenpendence;
 import com.crazywah.piedpiper.widget.PhotoDialog;
 
 import org.greenrobot.eventbus.EventBus;

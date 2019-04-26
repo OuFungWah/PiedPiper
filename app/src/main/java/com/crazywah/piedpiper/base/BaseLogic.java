@@ -31,4 +31,26 @@ public class BaseLogic {
         handler.sendMessage(msg);
     }
 
+    public void notifyUi(int what, int arg1){
+        Message msg = Message.obtain();
+        msg.what = what;
+        msg.arg1 = arg1;
+        handler.sendMessage(msg);
+    }
+
+    public void notifyUi(int what, int arg1, int arg2){
+        Message msg = Message.obtain();
+        msg.what = what;
+        msg.arg1 = arg1;
+        msg.arg2 = arg2;
+        handler.sendMessage(msg);
+    }
+
+    public void notifyUi(int what, Object obj){
+        Message msg = Message.obtain();
+        msg.what = what;
+        msg.obj = obj;
+        handler.sendMessage(msg);
+    }
+
 }
