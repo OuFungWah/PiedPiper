@@ -3,14 +3,17 @@ package com.crazywah.piedpiper.module.discovery.logic;
 import android.content.Context;
 import android.os.Handler;
 
+import com.crazywah.piedpiper.application.PiedPiperApplication;
 import com.crazywah.piedpiper.base.BaseLogic;
 import com.crazywah.piedpiper.bean.Comment;
+import com.crazywah.piedpiper.bean.Like;
 import com.crazywah.piedpiper.bean.Moment;
 import com.crazywah.piedpiper.bean.User;
 import com.crazywah.piedpiper.common.PiedCallback;
 import com.crazywah.piedpiper.common.PiedEvent;
 import com.crazywah.piedpiper.common.RequestManager;
 import com.crazywah.piedpiper.module.discovery.bean.MomentDetail;
+import com.crazywah.piedpiper.util.BinarySearch;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -80,6 +83,7 @@ public class MomentDetailLogic extends BaseLogic {
                 @Override
                 public void onSuccess(Void object) {
                     PiedEvent event = new PiedEvent(PiedEvent.EventType.MSG_LIKE_SUCC);
+                    modifyLikeList(true);
                     event.setParams(momentDetail.getMoment());
                     EventBus.getDefault().post(event);
                     notifyUi(MSG_LIKE_SUCC);
@@ -96,6 +100,7 @@ public class MomentDetailLogic extends BaseLogic {
                 @Override
                 public void onSuccess(Void object) {
                     PiedEvent event = new PiedEvent(PiedEvent.EventType.MSG_DISLIKE_SUCC);
+                    modifyLikeList(false);
                     event.setParams(momentDetail.getMoment());
                     EventBus.getDefault().post(event);
                     notifyUi(MSG_DISLIKE_SUCC);
@@ -110,6 +115,22 @@ public class MomentDetailLogic extends BaseLogic {
         }
     }
 
+    private void modifyLikeList(boolean isAdd) {
+        if (isAdd) {
+            Like like = new Like();
+            like.setFromId(PiedPiperApplication.getLoginUser().getAccountId());
+            like.setObjId(momentDetail.getMoment().getMomentId());
+            like.setAvatar(PiedPiperApplication.getLoginUser().getAvatar());
+            momentDetail.getLikeList().add(like);
+        } else {
+            for (Like like : momentDetail.getLikeList()) {
+                if (like.getFromId().equals(PiedPiperApplication.getLoginUser().getAccountId())) {
+                    momentDetail.getLikeList().remove(like);
+                }
+            }
+        }
+    }
+
     public MomentDetail getMomentDetail() {
         return momentDetail;
     }
@@ -117,4 +138,5 @@ public class MomentDetailLogic extends BaseLogic {
     public void setMomentDetail(MomentDetail momentDetail) {
         this.momentDetail = momentDetail;
     }
+
 }

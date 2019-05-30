@@ -13,6 +13,10 @@ public class Like {
     private int objType;
     private Date likeTime;
 
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
     public String getAvatar() {
         return avatar;
     }

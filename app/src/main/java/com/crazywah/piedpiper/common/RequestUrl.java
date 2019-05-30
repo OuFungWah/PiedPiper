@@ -4,8 +4,8 @@ public class RequestUrl {
 
     public static final boolean DEV = false;
 
-    //    public static final String HOST = "http://121.42.205.69:9527";
-    public static final String HOST = "http://www.crazywah.com:9527";
+        public static final String HOST = "http://121.42.205.69:9527";
+//    public static final String HOST = "http://www.crazywah.com:9527";
     public static final String DEV_HOST = "http://192.168.199.117:9527";
 
     public static final String URL_LOGIN = (DEV ? DEV_HOST : HOST) + "/account/login";

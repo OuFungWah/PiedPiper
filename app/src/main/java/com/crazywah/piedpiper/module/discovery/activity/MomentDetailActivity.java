@@ -75,7 +75,7 @@ public class MomentDetailActivity extends BaseActivity implements SwipeRefreshLa
                 progressingView.dismiss();
                 adapter.getMoment().setIsLiked(1);
                 adapter.getMoment().setLikeCount(adapter.getMoment().getLikeCount() + 1);
-                adapter.notifyItemChanged(MomentDetailAdapter.INDEX_MOMENT, "");
+                adapter.notifyItemRangeChanged(0, 2, "");
                 break;
             case MomentDetailLogic.MSG_LIKE_FAIL:
                 progressingView.dismiss();
@@ -86,7 +86,7 @@ public class MomentDetailActivity extends BaseActivity implements SwipeRefreshLa
                 progressingView.dismiss();
                 adapter.getMoment().setIsLiked(0);
                 adapter.getMoment().setLikeCount(adapter.getMoment().getLikeCount() - 1);
-                adapter.notifyItemChanged(MomentDetailAdapter.INDEX_MOMENT, "");
+                adapter.notifyItemRangeChanged(0, 2, "");
                 break;
             case MomentDetailLogic.MSG_DISLIKE_FAIL:
                 progressingView.dismiss();
@@ -143,7 +143,7 @@ public class MomentDetailActivity extends BaseActivity implements SwipeRefreshLa
         refreshLayout.setRefreshing(false);
         if (succ) {
             adapter.setAll(logic.getMomentDetail());
-            adapter.notifyItemMoved(0, 2);
+            adapter.notifyItemRangeChanged(0, 3, "");
             showNoData(false, "");
             detailRv.setVisibility(View.VISIBLE);
         } else {
